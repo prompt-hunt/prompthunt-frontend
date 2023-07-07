@@ -1,11 +1,46 @@
 import cx from "classnames";
+import { useState } from "react";
 
 import { Spinner } from "@components/basic/spinner";
 import { PromptCard } from "@components/prompt/prompt-card";
+import { PROMPT_CATEGORIES, PROMPT_MODELS } from "@constants/prompts";
 import { usePrompts } from "@lib/prompts/use-prompts";
 
-const PromptsCatalogInner = () => {
-  const { data: prompts, isLoading } = usePrompts();
+interface CategoryButtonProps {
+  category: string;
+  isActive: boolean;
+  onClick?: () => void;
+}
+
+const CategoryButton = ({
+  isActive,
+  category,
+  onClick,
+}: CategoryButtonProps) => {
+  return (
+    <button
+      className={cx(
+        "rounded-full border border-base-content px-4 py-2",
+        isActive ? "bg-base-content text-base-100" : "text-base-content",
+      )}
+      onClick={onClick}
+    >
+      {category}
+    </button>
+  );
+};
+
+const PromptsCatalogInner = ({
+  category,
+  model,
+}: {
+  category: string;
+  model: string;
+}) => {
+  const { data: prompts, isLoading } = usePrompts({
+    category,
+    model,
+  });
 
   if (isLoading) {
     return (
@@ -32,9 +67,47 @@ const PromptsCatalogInner = () => {
 };
 
 export const PromptsCatalog = ({ className }: { className?: string }) => {
+  const [activeCategory, setActiveCategory] = useState("");
+  const [activeModel, setActiveModel] = useState("");
+
   return (
     <div className={className}>
-      <PromptsCatalogInner />
+      <div className="mb-8 flex items-center gap-2">
+        <CategoryButton
+          category={"All"}
+          onClick={() => {
+            setActiveCategory("");
+            setActiveModel("");
+          }}
+          isActive={activeCategory === "" && activeModel === ""}
+        />
+        <div className="mx-3 h-10 w-px bg-base-content" />
+
+        {PROMPT_MODELS.map((model) => (
+          <CategoryButton
+            key={model}
+            category={model}
+            onClick={() => {
+              setActiveModel(model);
+              setActiveCategory("");
+            }}
+            isActive={activeModel === model}
+          />
+        ))}
+        <div className="mx-3 h-10 w-px bg-base-content" />
+        {PROMPT_CATEGORIES.map((category) => (
+          <CategoryButton
+            key={category}
+            category={category}
+            onClick={() => {
+              setActiveCategory(category);
+              setActiveModel("");
+            }}
+            isActive={activeCategory === category}
+          />
+        ))}
+      </div>
+      <PromptsCatalogInner category={activeCategory} model={activeModel} />
     </div>
   );
 };

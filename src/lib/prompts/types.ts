@@ -13,4 +13,5 @@ export interface PromptMetadata {
   image: string;
   exampleInput: Record<string, string>;
   exampleOutput: string;
+  category: string;
 }

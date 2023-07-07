@@ -7,13 +7,16 @@ import { Prompt, PromptMetadata } from "./types";
 
 interface UsePromptsParams {
   enabled?: boolean;
+  category?: string;
+  model?: string;
 }
 
 export const usePrompts = (params?: UsePromptsParams) => {
+  const { category, model } = params || {};
   const promptHunt = usePromptHunt();
 
   return useQuery(
-    ["prompts"],
+    ["prompts", category, model],
     async () => {
       if (!promptHunt) return [];
 
@@ -56,7 +59,21 @@ export const usePrompts = (params?: UsePromptsParams) => {
         metadata: promptsMetadata[index],
       }));
 
-      return promptsWithMetadata;
+      /* Filter prompts by category */
+      const filteredPromptsByCategory = category
+        ? promptsWithMetadata.filter(
+            (prompt) => prompt.metadata.category === category,
+          )
+        : promptsWithMetadata;
+
+      /* Filter prompts by model */
+      const filteredPrompts = model
+        ? filteredPromptsByCategory.filter(
+            (prompt) => prompt.metadata.model === model,
+          )
+        : filteredPromptsByCategory;
+
+      return filteredPrompts;
     },
     {
       enabled: params?.enabled,
