@@ -11,7 +11,15 @@ export interface PromptMetadata {
   prompt: string;
   model: string;
   image: string;
+
+  category: string;
+}
+
+export interface PromptWithExamples extends Prompt {
+  examples: PromptExample[];
+}
+
+export interface PromptExample {
   exampleInput: Record<string, string>;
   exampleOutput: string;
-  category: string;
 }

@@ -8,7 +8,7 @@ export const PromptHuntAbi = [
     anonymous: false,
     inputs: [
       {
-        indexed: false,
+        indexed: true,
         internalType: "uint256",
         name: "id",
         type: "uint256",
@@ -33,6 +33,12 @@ export const PromptHuntAbi = [
     anonymous: false,
     inputs: [
       {
+        indexed: true,
+        internalType: "uint256",
+        name: "id",
+        type: "uint256",
+      },
+      {
         indexed: false,
         internalType: "address",
         name: "user",
@@ -52,7 +58,7 @@ export const PromptHuntAbi = [
     anonymous: false,
     inputs: [
       {
-        indexed: false,
+        indexed: true,
         internalType: "uint256",
         name: "id",
         type: "uint256",

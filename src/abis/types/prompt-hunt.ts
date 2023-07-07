@@ -86,7 +86,7 @@ export interface PromptHuntInterface extends utils.Interface {
 
   events: {
     "PromptCreated(uint256,address,string)": EventFragment;
-    "PromptExampleAdded(address,string)": EventFragment;
+    "PromptExampleAdded(uint256,address,string)": EventFragment;
     "PromptUpvoted(uint256,address)": EventFragment;
   };
 
@@ -108,11 +108,12 @@ export type PromptCreatedEvent = TypedEvent<
 export type PromptCreatedEventFilter = TypedEventFilter<PromptCreatedEvent>;
 
 export interface PromptExampleAddedEventObject {
+  id: BigNumber;
   user: string;
   dataUri: string;
 }
 export type PromptExampleAddedEvent = TypedEvent<
-  [string, string],
+  [BigNumber, string, string],
   PromptExampleAddedEventObject
 >;
 
@@ -261,30 +262,35 @@ export interface PromptHunt extends BaseContract {
 
   filters: {
     "PromptCreated(uint256,address,string)"(
-      id?: null,
+      id?: PromiseOrValue<BigNumberish> | null,
       owner?: null,
       dataUri?: null,
     ): PromptCreatedEventFilter;
     PromptCreated(
-      id?: null,
+      id?: PromiseOrValue<BigNumberish> | null,
       owner?: null,
       dataUri?: null,
     ): PromptCreatedEventFilter;
 
-    "PromptExampleAdded(address,string)"(
+    "PromptExampleAdded(uint256,address,string)"(
+      id?: PromiseOrValue<BigNumberish> | null,
       user?: null,
       dataUri?: null,
     ): PromptExampleAddedEventFilter;
     PromptExampleAdded(
+      id?: PromiseOrValue<BigNumberish> | null,
       user?: null,
       dataUri?: null,
     ): PromptExampleAddedEventFilter;
 
     "PromptUpvoted(uint256,address)"(
-      id?: null,
+      id?: PromiseOrValue<BigNumberish> | null,
       upvoter?: null,
     ): PromptUpvotedEventFilter;
-    PromptUpvoted(id?: null, upvoter?: null): PromptUpvotedEventFilter;
+    PromptUpvoted(
+      id?: PromiseOrValue<BigNumberish> | null,
+      upvoter?: null,
+    ): PromptUpvotedEventFilter;
   };
 
   estimateGas: {
