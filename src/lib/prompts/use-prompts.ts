@@ -5,11 +5,11 @@ import { fetchFromIpfs } from "@utils/ipfs";
 
 import { Prompt, PromptMetadata } from "./types";
 
-interface UsePromptsOptions {
+interface UsePromptsParams {
   enabled?: boolean;
 }
 
-export const usePrompts = (options?: UsePromptsOptions) => {
+export const usePrompts = (params?: UsePromptsParams) => {
   const promptHunt = usePromptHunt();
 
   return useQuery(
@@ -59,7 +59,7 @@ export const usePrompts = (options?: UsePromptsOptions) => {
       return promptsWithMetadata;
     },
     {
-      enabled: options?.enabled,
+      enabled: params?.enabled,
     },
   );
 };
