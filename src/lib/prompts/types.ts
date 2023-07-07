@@ -8,9 +8,9 @@ export interface Prompt {
 
 export interface PromptMetadata {
   title: string;
-  image: string;
   prompt: string;
   model: string;
+  image: string;
   exampleInput: Record<string, string>;
   exampleOutput: string;
 }
