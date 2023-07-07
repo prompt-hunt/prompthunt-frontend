@@ -2,8 +2,12 @@ import "../styles/globals.css";
 import "@rainbow-me/rainbowkit/styles.css";
 
 import { getDefaultWallets, RainbowKitProvider } from "@rainbow-me/rainbowkit";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+// import { ReactQueryDevtools } from "@tanstack/react-query-devtools/build/lib/devtools";
+// import dynamic from "next/dynamic";
 import { DefaultSeo } from "next-seo";
 import { ThemeProvider } from "next-themes";
+// import { useEffect, useState } from "react";
 import { configureChains, createClient, WagmiConfig } from "wagmi";
 import { alchemyProvider } from "wagmi/providers/alchemy";
 import { publicProvider } from "wagmi/providers/public";
@@ -34,20 +38,43 @@ const client = createClient({
   persister: null,
 });
 
+const queryClient = new QueryClient();
+// const ReactQueryDevtoolsProduction = dynamic(
+//   () =>
+//     // eslint-disable-next-line import/extensions
+//     import("@tanstack/react-query-devtools/build/lib/index.prod.js").then(
+//       (d) => ({
+//         default: d.ReactQueryDevtools,
+//       }),
+//     ),
+//   { ssr: false },
+// );
+
 function MyApp({ Component, pageProps }: AppProps) {
+  // const [showReactQueryDevtools, setShowReactQueryDevtools] = useState(false);
+  // useEffect(() => {
+  //   // @ts-expect-error - window doesn't have toggleDevtools but we're adding it
+  //   window.toggleDevtools = () => setShowReactQueryDevtools((old) => !old);
+  // }, []);
+
   const getLayout =
     (Component as ExtendedPage).getLayout ||
     ((page) => <DefaultLayout>{page}</DefaultLayout>);
 
   return (
-    <WagmiConfig client={client}>
-      <RainbowKitProvider chains={chains}>
-        <ThemeProvider>
-          <DefaultSeo {...SEO} />
-          {getLayout(<Component {...pageProps} />)}
-        </ThemeProvider>
-      </RainbowKitProvider>
-    </WagmiConfig>
+    <QueryClientProvider client={queryClient}>
+      {/* <ReactQueryDevtools initialIsOpen={false} /> */}
+      {/* {showReactQueryDevtools && <ReactQueryDevtoolsProduction />} */}
+
+      <WagmiConfig client={client}>
+        <RainbowKitProvider chains={chains}>
+          <ThemeProvider>
+            <DefaultSeo {...SEO} />
+            {getLayout(<Component {...pageProps} />)}
+          </ThemeProvider>
+        </RainbowKitProvider>
+      </WagmiConfig>
+    </QueryClientProvider>
   );
 }
 
