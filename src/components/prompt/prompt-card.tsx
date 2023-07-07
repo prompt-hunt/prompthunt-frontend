@@ -16,8 +16,12 @@ export const PromptCard = ({ prompt }: PromptCardProps) => {
   return (
     <Link
       href={`/prompts/${prompt.id}`}
-      className="rounded-box flex flex-col overflow-hidden bg-base-200"
+      className="rounded-box relative flex flex-col overflow-hidden bg-base-200"
     >
+      <div className="rounded-btn absolute left-3 top-3 z-10 bg-neutral px-2 py-0.5 text-sm text-neutral-content">
+        {prompt.metadata.model}
+      </div>
+
       <div className="relative h-44">
         <Image
           src={prompt.metadata.image}
