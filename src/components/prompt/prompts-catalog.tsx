@@ -20,7 +20,7 @@ const CategoryButton = ({
   return (
     <button
       className={cx(
-        "rounded-full border border-base-content px-4 py-2",
+        "rounded-full border border-base-content sm:px-4 sm:py-2 px-3 py-1",
         isActive ? "bg-base-content text-base-100" : "text-base-content",
       )}
       onClick={onClick}
@@ -72,7 +72,7 @@ export const PromptsCatalog = ({ className }: { className?: string }) => {
 
   return (
     <div className={className}>
-      <div className="mb-8 flex items-center gap-2">
+      <div className="mb-8 flex flex-wrap items-center gap-2">
         <CategoryButton
           category={"All"}
           onClick={() => {
@@ -81,7 +81,7 @@ export const PromptsCatalog = ({ className }: { className?: string }) => {
           }}
           isActive={activeCategory === "" && activeModel === ""}
         />
-        <div className="mx-3 h-10 w-px bg-base-content" />
+        <div className="mx-3 h-8 w-px bg-base-content sm:h-10" />
 
         {PROMPT_MODELS.map((model) => (
           <CategoryButton
@@ -94,7 +94,7 @@ export const PromptsCatalog = ({ className }: { className?: string }) => {
             isActive={activeModel === model}
           />
         ))}
-        <div className="mx-3 h-10 w-px bg-base-content" />
+        <div className="mx-3 h-8 w-px bg-base-content sm:h-10" />
         {PROMPT_CATEGORIES.map((category) => (
           <CategoryButton
             key={category}
