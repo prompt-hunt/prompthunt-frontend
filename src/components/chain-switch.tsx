@@ -25,6 +25,8 @@ export const ChainSwitch = () => {
   const { chain } = useNetwork();
   const { switchNetwork } = useSwitchNetwork();
 
+  console.log(">>> CHAINS: ", CHAINS);
+
   return (
     <Dropdown className="inline-flex">
       <DropdownTrigger>

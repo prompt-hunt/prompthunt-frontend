@@ -1,5 +1,7 @@
-import { useQuery } from "wagmi";
+import { useQuery } from "@tanstack/react-query";
+import { useChainId } from "wagmi";
 
+import { DEPLOYMENT_BLOCK } from "@constants/addresses";
 import { usePromptHunt } from "@hooks/use-prompt-hunt";
 import { fetchFromIpfs } from "@utils/ipfs";
 
@@ -13,18 +15,22 @@ interface UsePromptsParams {
 }
 
 export const usePrompts = (params?: UsePromptsParams) => {
+  const chainId = useChainId();
   const { category, model, query } = params || {};
   const promptHunt = usePromptHunt();
 
   return useQuery(
-    ["prompts", category, model, query],
+    ["prompts", category, model, query, chainId],
     async () => {
       if (!promptHunt) return [];
 
       /* Get prompts */
       const prompts: Omit<Prompt, "metadata">[] = [];
       const eventFilter = promptHunt.filters.PromptCreated();
-      const events = await promptHunt.queryFilter(eventFilter);
+      const events = await promptHunt.queryFilter(
+        eventFilter,
+        DEPLOYMENT_BLOCK[chainId],
+      );
 
       for (const event of events) {
         if (!event.args) continue;

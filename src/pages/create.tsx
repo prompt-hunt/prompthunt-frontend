@@ -14,13 +14,12 @@ import { Input } from "@components/basic/input";
 import { Label } from "@components/basic/label";
 import { TextArea } from "@components/basic/textarea/textarea";
 import { PROMPT_CATEGORIES, PROMPT_MODELS } from "@constants/prompts";
+import { useExecuteGptPrompt } from "@lib/gpt/use-execute-gpt-prompt";
 import { useCreatePrompt } from "@lib/prompts/use-create-prompt";
 import { capitalizeFirstCharacter } from "@utils/capitalize-first-character";
 import { extractParameters } from "@utils/extract-parameters";
 
 import type { NextPage } from "next";
-
-import axios from "axios"
 
 interface CreatePromptFields {
   title: string;
@@ -34,16 +33,23 @@ interface CreatePromptFields {
 const CreatePage: NextPage = () => {
   const router = useRouter();
   const [category, setCategory] = useState(PROMPT_CATEGORIES[0]);
-  const [chatGPTResponse, setChatGPTResponse] = useState("");
+  const [result, setResult] = useState("");
   const [activeModel, setActiveModel] = useState(PROMPT_MODELS[0]);
 
-  const { mutate: createPrompt } = useCreatePrompt({
+  const { mutate: createPrompt, isLoading } = useCreatePrompt({
     onSuccess(receipt) {
       const promptId = receipt?.events?.find((e) => e.event === "PromptCreated")
         ?.args?.id;
       router.push(`/prompts/${promptId}`);
     },
   });
+
+  const { mutate: executePrompt, isLoading: isLoadingExecute } =
+    useExecuteGptPrompt({
+      onSuccess(result) {
+        setResult(result);
+      },
+    });
 
   const {
     register,
@@ -52,9 +58,9 @@ const CreatePage: NextPage = () => {
     watch,
     getValues,
   } = useForm<CreatePromptFields>({
-     defaultValues: {
-      parameters: {}
-     }
+    defaultValues: {
+      parameters: {},
+    },
   });
 
   const prompt = watch("prompt") || "";
@@ -68,18 +74,9 @@ const CreatePage: NextPage = () => {
       data.prompt,
     );
 
-
-
-    axios.post('/api/gpt',{
+    executePrompt({
       prompt: promptWithParameters,
-    })
-    .then(function (response) {
-      setChatGPTResponse(response.data.result);
     });
-
-
-
-    console.log("promptWithParameters", promptWithParameters);
   });
 
   const onShare = () => {
@@ -95,8 +92,7 @@ const CreatePage: NextPage = () => {
         "https://firebasestorage.googleapis.com/v0/b/promptbase.appspot.com/o/DALLE_IMAGES%2FCrpcqah7YdgU133cBw6H%2Fresized%2F1687293200789_800x800.webp?alt=media&token=c5f63804-7181-4039-bf15-1a24bf98afea",
       exampleInput: parameters,
       // Use result of the prompt
-      exampleOutput:
-        "Day 1: Breakfast: Avocado and Bacon Omelette Recipe: Avocado and Bacon Omelette, Lunch: Greek Salad with Grilled Chicken Recipe: Greek Salad with Grilled Chicken, Dinner: Baked Salmon with Lemon Butter Sauce and Roasted Asparagus Recipe: Baked Salmon with Lemon Butter Sauce + Roasted Asparagus",
+      exampleOutput: result,
     });
   };
 
@@ -185,20 +181,26 @@ const CreatePage: NextPage = () => {
               />
             </div>
           ))}
-          <Button className="mt-4" block type="submit">
+          <Button
+            className="mt-4"
+            block
+            type="submit"
+            loading={isLoadingExecute}
+            disabled={isLoadingExecute}
+          >
             Submit
           </Button>
         </form>
       </div>
 
-      <div className="flex flex-1 flex-col">
-        <div className="flex justify-end">
-          <Button onClick={onShare}>Share</Button>
+      <div className="flex flex-1 flex-col gap-4">
+        <div className="rounded-box flex-1 bg-base-200 p-4">
+          <p>{result}</p>
         </div>
-        <div className="rounded-box mt-4 flex-1 bg-base-200 p-4">
-          <p>
-            {chatGPTResponse}
-          </p>
+        <div className="flex justify-end">
+          <Button onClick={onShare} loading={isLoading} disabled={isLoading}>
+            Share
+          </Button>
         </div>
       </div>
     </div>

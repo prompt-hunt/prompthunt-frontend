@@ -1,5 +1,7 @@
-import { useQuery } from "wagmi";
+import { useQuery } from "@tanstack/react-query";
+import { useChainId } from "wagmi";
 
+import { DEPLOYMENT_BLOCK } from "@constants/addresses";
 import { usePromptHunt } from "@hooks/use-prompt-hunt";
 import { fetchFromIpfs } from "@utils/ipfs";
 
@@ -10,11 +12,12 @@ interface UsePromptParams {
 }
 
 export const usePrompt = (params: UsePromptParams) => {
+  const chainId = useChainId();
   const { promptId } = params;
   const promptHunt = usePromptHunt();
 
   return useQuery<PromptWithExamples | undefined>(
-    ["prompt", promptId],
+    ["prompt", promptId, chainId],
     async () => {
       if (!promptHunt) return;
 
@@ -25,7 +28,10 @@ export const usePrompt = (params: UsePromptParams) => {
       /* Get prompt examples */
       const dataUris: string[] = [];
       const eventFilter = promptHunt.filters.PromptExampleAdded(promptId);
-      const events = await promptHunt.queryFilter(eventFilter);
+      const events = await promptHunt.queryFilter(
+        eventFilter,
+        DEPLOYMENT_BLOCK[chainId],
+      );
 
       for (const event of events) {
         if (!event.args) continue;

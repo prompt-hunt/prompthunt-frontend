@@ -17,13 +17,14 @@ import { useUpvotePrompt } from "@lib/prompts/use-upvote-prompt";
 interface PromptInfoProps {
   prompt: PromptWithExamples;
   onUpvote?: () => void;
+  onExecute?: () => void;
 }
 
-const PromptInfo = ({ prompt, onUpvote }: PromptInfoProps) => {
+const PromptInfo = ({ prompt, onUpvote, onExecute }: PromptInfoProps) => {
   const { data: hasUpvoted, refetch } = useHasUpvotedPrompt({
     promptId: prompt.id,
   });
-  const { mutate: upvotePrompt } = useUpvotePrompt({
+  const { mutate: upvotePrompt, isLoading } = useUpvotePrompt({
     onSuccess() {
       refetch();
       onUpvote?.();
@@ -63,7 +64,7 @@ const PromptInfo = ({ prompt, onUpvote }: PromptInfoProps) => {
 
           <div className="mt-6 flex justify-between">
             <div className="mt-1 flex items-center gap-2">
-              <AddressAvatar address={prompt.owner} />
+              <AddressAvatar address={prompt.owner} size={30} />
               <Address address={prompt.owner} />
             </div>
 
@@ -79,8 +80,14 @@ const PromptInfo = ({ prompt, onUpvote }: PromptInfoProps) => {
                 )}
                 disabled={hasUpvoted}
               >
-                <UpvoteIcon className="h-4 w-4" />
-                <span className="font-bold">{prompt.upvotes}</span>
+                {isLoading ? (
+                  <Spinner />
+                ) : (
+                  <span>
+                    <UpvoteIcon className="h-4 w-4" />
+                    <span className="font-bold">{prompt.upvotes}</span>
+                  </span>
+                )}
               </button>
             </div>
           </div>
@@ -88,15 +95,7 @@ const PromptInfo = ({ prompt, onUpvote }: PromptInfoProps) => {
 
         <div className="flex-1">
           <h4 className="mb-6 text-2xl font-semibold">Try the prompt</h4>
-          <TestPromptForm prompt={prompt} />
-          <div className="rounded-box mt-4 bg-base-200 p-4">
-            <span className="font-bold">Result:</span>
-            <p>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit.
-              Consectetur nostrum quas deserunt a numquam ad ab quo? Excepturi,
-              beatae ab?
-            </p>
-          </div>
+          <TestPromptForm prompt={prompt} onExecute={onExecute} />
         </div>
       </div>
 
@@ -120,7 +119,7 @@ const PromptPageInner = ({ id }: { id: number }) => {
     );
   }
 
-  return <PromptInfo prompt={prompt} onUpvote={refetch} />;
+  return <PromptInfo prompt={prompt} onUpvote={refetch} onExecute={refetch} />;
 };
 
 const PromptPage = () => {

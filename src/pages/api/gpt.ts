@@ -1,9 +1,12 @@
-const { Configuration, OpenAIApi } = require("openai");
-const apiKey = "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";
+import { NextApiRequest, NextApiResponse } from "next";
+import { Configuration, OpenAIApi } from "openai";
 
-export default async function handler(req, res) {
-  console.log("CIao");
+const apiKey = process.env.OPENAI_API_KEY;
 
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse,
+) {
   if (req.method === "POST") {
     const configuration = new Configuration({
       apiKey,
@@ -19,12 +22,10 @@ export default async function handler(req, res) {
       presence_penalty: 0,
     });
 
-    // Process a POST request
-
     const response = completion.data.choices[0].text;
-    const cleanedResponse = response.replace("\n\n", "");
+    // const cleanedResponse = response?.replace("\n\n", "");
 
-    return res.json({ result: cleanedResponse });
+    return res.json({ result: response });
   } else {
     return res.status(403).json({ message: "Not allowed" });
   }

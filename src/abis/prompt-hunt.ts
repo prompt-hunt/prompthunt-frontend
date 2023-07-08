@@ -74,6 +74,25 @@ export const PromptHuntAbi = [
     type: "event",
   },
   {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "address",
+        name: "user",
+        type: "address",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "totalUpvotes",
+        type: "uint256",
+      },
+    ],
+    name: "UserUpvotesUpdated",
+    type: "event",
+  },
+  {
     inputs: [
       {
         internalType: "uint256",
@@ -87,6 +106,13 @@ export const PromptHuntAbi = [
       },
     ],
     name: "addPromptExample",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "claimFunds",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
@@ -169,5 +195,9 @@ export const PromptHuntAbi = [
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
+  },
+  {
+    stateMutability: "payable",
+    type: "receive",
   },
 ] as const;

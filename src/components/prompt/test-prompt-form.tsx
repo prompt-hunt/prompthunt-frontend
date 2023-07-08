@@ -1,30 +1,58 @@
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 
 import { Button } from "@components/basic/button";
 import { Input } from "@components/basic/input";
+import { useExecuteGptPrompt } from "@lib/gpt/use-execute-gpt-prompt";
 import { Prompt } from "@lib/prompts/types";
+import { useAddPromptExample } from "@lib/prompts/use-add-prompt-example";
 import { capitalizeFirstCharacter } from "@utils/capitalize-first-character";
 import { extractParameters } from "@utils/extract-parameters";
 
 interface TestPromptFormProps {
   prompt: Prompt;
+  onExecute?: () => void;
 }
 
-export const TestPromptForm = ({ prompt }: TestPromptFormProps) => {
+export const TestPromptForm = ({ prompt, onExecute }: TestPromptFormProps) => {
   const promptParameters = extractParameters(prompt.metadata.prompt);
+  const { mutate: addPromptExample, isLoading } = useAddPromptExample({
+    onSuccess() {
+      onExecute?.();
+    },
+  });
+
+  const [result, setResult] = useState("");
 
   const {
     register,
     handleSubmit,
     formState: { errors },
+    getValues,
   } = useForm();
+
+  const { mutate: executePrompt, isLoading: isLoadingExecute } =
+    useExecuteGptPrompt({
+      onSuccess(result) {
+        setResult(result);
+        addPromptExample({
+          promptId: prompt.id,
+          exampleInput: getValues(),
+          // TODO: get output from response
+          exampleOutput: result,
+        });
+      },
+    });
 
   const onSubmit = handleSubmit(async (data) => {
     const promptWithParameters = promptParameters.reduce((acc, parameter) => {
       return acc.replace(`<${parameter}>`, data[parameter]);
     }, prompt.metadata.prompt);
 
-    console.log("promptWithParameters", promptWithParameters);
+    // TODO: execute prompt
+    executePrompt({
+      prompt: promptWithParameters,
+    });
   });
 
   return (
@@ -44,9 +72,19 @@ export const TestPromptForm = ({ prompt }: TestPromptFormProps) => {
           />
         </div>
       ))}
-      <Button className="mt-4" block type="submit">
-        Submit
+      <Button
+        className="mt-4"
+        block
+        type="submit"
+        loading={isLoading || isLoadingExecute}
+        disabled={isLoading || isLoadingExecute}
+      >
+        Run
       </Button>
+      <div className="rounded-box mt-4 bg-base-200 p-4">
+        <span className="font-bold">Result:</span>
+        <p>{result}</p>
+      </div>
     </form>
   );
 };

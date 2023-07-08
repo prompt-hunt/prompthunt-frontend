@@ -30,6 +30,7 @@ import type {
 export interface PromptHuntInterface extends utils.Interface {
   functions: {
     "addPromptExample(uint256,string)": FunctionFragment;
+    "claimFunds()": FunctionFragment;
     "createPrompt(string)": FunctionFragment;
     "hasUpvotedPrompt(address,uint256)": FunctionFragment;
     "prompts(uint256)": FunctionFragment;
@@ -39,6 +40,7 @@ export interface PromptHuntInterface extends utils.Interface {
   getFunction(
     nameOrSignatureOrTopic:
       | "addPromptExample"
+      | "claimFunds"
       | "createPrompt"
       | "hasUpvotedPrompt"
       | "prompts"
@@ -48,6 +50,10 @@ export interface PromptHuntInterface extends utils.Interface {
   encodeFunctionData(
     functionFragment: "addPromptExample",
     values: [PromiseOrValue<BigNumberish>, PromiseOrValue<string>],
+  ): string;
+  encodeFunctionData(
+    functionFragment: "claimFunds",
+    values?: undefined,
   ): string;
   encodeFunctionData(
     functionFragment: "createPrompt",
@@ -70,6 +76,7 @@ export interface PromptHuntInterface extends utils.Interface {
     functionFragment: "addPromptExample",
     data: BytesLike,
   ): Result;
+  decodeFunctionResult(functionFragment: "claimFunds", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "createPrompt",
     data: BytesLike,
@@ -88,11 +95,13 @@ export interface PromptHuntInterface extends utils.Interface {
     "PromptCreated(uint256,address,string)": EventFragment;
     "PromptExampleAdded(uint256,address,string)": EventFragment;
     "PromptUpvoted(uint256,address)": EventFragment;
+    "UserUpvotesUpdated(address,uint256)": EventFragment;
   };
 
   getEvent(nameOrSignatureOrTopic: "PromptCreated"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "PromptExampleAdded"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "PromptUpvoted"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "UserUpvotesUpdated"): EventFragment;
 }
 
 export interface PromptCreatedEventObject {
@@ -131,6 +140,18 @@ export type PromptUpvotedEvent = TypedEvent<
 
 export type PromptUpvotedEventFilter = TypedEventFilter<PromptUpvotedEvent>;
 
+export interface UserUpvotesUpdatedEventObject {
+  user: string;
+  totalUpvotes: BigNumber;
+}
+export type UserUpvotesUpdatedEvent = TypedEvent<
+  [string, BigNumber],
+  UserUpvotesUpdatedEventObject
+>;
+
+export type UserUpvotesUpdatedEventFilter =
+  TypedEventFilter<UserUpvotesUpdatedEvent>;
+
 export interface PromptHunt extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
   attach(addressOrName: string): this;
@@ -161,6 +182,10 @@ export interface PromptHunt extends BaseContract {
     addPromptExample(
       _promptId: PromiseOrValue<BigNumberish>,
       _dataUri: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> },
+    ): Promise<ContractTransaction>;
+
+    claimFunds(
       overrides?: Overrides & { from?: PromiseOrValue<string> },
     ): Promise<ContractTransaction>;
 
@@ -198,6 +223,10 @@ export interface PromptHunt extends BaseContract {
     overrides?: Overrides & { from?: PromiseOrValue<string> },
   ): Promise<ContractTransaction>;
 
+  claimFunds(
+    overrides?: Overrides & { from?: PromiseOrValue<string> },
+  ): Promise<ContractTransaction>;
+
   createPrompt(
     _dataUri: PromiseOrValue<string>,
     overrides?: Overrides & { from?: PromiseOrValue<string> },
@@ -231,6 +260,8 @@ export interface PromptHunt extends BaseContract {
       _dataUri: PromiseOrValue<string>,
       overrides?: CallOverrides,
     ): Promise<void>;
+
+    claimFunds(overrides?: CallOverrides): Promise<void>;
 
     createPrompt(
       _dataUri: PromiseOrValue<string>,
@@ -291,12 +322,25 @@ export interface PromptHunt extends BaseContract {
       id?: PromiseOrValue<BigNumberish> | null,
       upvoter?: PromiseOrValue<string> | null,
     ): PromptUpvotedEventFilter;
+
+    "UserUpvotesUpdated(address,uint256)"(
+      user?: PromiseOrValue<string> | null,
+      totalUpvotes?: null,
+    ): UserUpvotesUpdatedEventFilter;
+    UserUpvotesUpdated(
+      user?: PromiseOrValue<string> | null,
+      totalUpvotes?: null,
+    ): UserUpvotesUpdatedEventFilter;
   };
 
   estimateGas: {
     addPromptExample(
       _promptId: PromiseOrValue<BigNumberish>,
       _dataUri: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> },
+    ): Promise<BigNumber>;
+
+    claimFunds(
       overrides?: Overrides & { from?: PromiseOrValue<string> },
     ): Promise<BigNumber>;
 
@@ -326,6 +370,10 @@ export interface PromptHunt extends BaseContract {
     addPromptExample(
       _promptId: PromiseOrValue<BigNumberish>,
       _dataUri: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> },
+    ): Promise<PopulatedTransaction>;
+
+    claimFunds(
       overrides?: Overrides & { from?: PromiseOrValue<string> },
     ): Promise<PopulatedTransaction>;
 
