@@ -3,31 +3,15 @@ import { useRouter } from "next/router";
 
 import { Address } from "@components/address";
 import { AddressAvatar } from "@components/address-avatar";
-import { Button } from "@components/basic/button";
-import { Input } from "@components/basic/input";
 import { Spinner } from "@components/basic/spinner";
 import { CopyButton } from "@components/copy-button";
 import { PromptExamplesList } from "@components/prompt/prompt-examples-list";
+import { TestPromptForm } from "@components/prompt/test-prompt-form";
 import UpvoteIcon from "@icons/upvote.svg";
 import { PromptWithExamples } from "@lib/prompts/types";
 import { usePrompt } from "@lib/prompts/use-prompt";
-import { capitalizeFirstCharacter } from "@utils/capitalize-first-character";
-
-const extractParameters = (str: string) => {
-  const regex = /<([^>]+)>/g;
-  const matches = str.match(regex);
-
-  if (matches) {
-    const parameters = matches.map((match) => match.slice(1, -1));
-    return parameters;
-  }
-
-  return [];
-};
 
 const PromptInfo = ({ prompt }: { prompt: PromptWithExamples }) => {
-  const promptParameters = extractParameters(prompt.metadata.prompt);
-
   return (
     <div>
       <div className="flex flex-col gap-14 md:flex-row lg:gap-20">
@@ -71,19 +55,7 @@ const PromptInfo = ({ prompt }: { prompt: PromptWithExamples }) => {
 
         <div className="flex-1">
           <h4 className="mb-6 text-2xl font-semibold">Try the prompt</h4>
-          <div className="flex w-full flex-col gap-2">
-            {promptParameters.map((parameter) => (
-              <div key={parameter} className="flex items-center gap-2">
-                <span className="w-[6rem] font-bold">
-                  {capitalizeFirstCharacter(parameter)}
-                </span>
-                <Input size="sm" className="flex-1" />
-              </div>
-            ))}
-          </div>
-          <Button className="mt-4" block>
-            Submit
-          </Button>
+          <TestPromptForm prompt={prompt} />
           <div className="rounded-box mt-4 bg-base-200 p-4">
             <span className="font-bold">Result:</span>
             <p>

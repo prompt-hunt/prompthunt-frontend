@@ -17,7 +17,7 @@ export const PromptExamplesList = ({
       <div className="grid grid-cols-1 gap-6 md:grid-cols-autofill">
         {prompt.examples?.map((example) => (
           <PromptExampleCard
-            key={example.exampleInput.toString()}
+            key={JSON.stringify(example.exampleInput)}
             prompt={prompt}
             example={example}
           />
