@@ -54,7 +54,7 @@ const CreatePage: NextPage = () => {
   const promptParameters = extractParameters(prompt);
 
   const onSubmit = handleSubmit(async (data) => {
-    const promptWithParameters = Object.entries(data.parameters).reduce(
+    const promptWithParameters = Object.entries(data.parameters || {}).reduce(
       (acc, entry) => {
         return acc.replace(`<${entry[0]}>`, entry[1]);
       },

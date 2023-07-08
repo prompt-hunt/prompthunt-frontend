@@ -1,5 +1,6 @@
-import { useQuery } from "wagmi";
+import { useChainId, useQuery } from "wagmi";
 
+import { DEPLOYMENT_BLOCK } from "@constants/addresses";
 import { usePromptHunt } from "@hooks/use-prompt-hunt";
 
 interface TopUser {
@@ -8,15 +9,19 @@ interface TopUser {
 }
 
 export const useTopUsers = () => {
+  const chainId = useChainId();
   const promptHunt = usePromptHunt();
 
-  return useQuery<TopUser[]>(["top-users"], async () => {
+  return useQuery<TopUser[]>(["top-users", chainId], async () => {
     if (!promptHunt) return [];
 
     /* Get prompt examples */
     const upvotesByUser: Record<string, TopUser> = {};
     const eventFilter = promptHunt.filters.UserUpvotesUpdated();
-    const events = await promptHunt.queryFilter(eventFilter);
+    const events = await promptHunt.queryFilter(
+      eventFilter,
+      DEPLOYMENT_BLOCK[chainId],
+    );
 
     for (const event of events) {
       if (!event.args) continue;

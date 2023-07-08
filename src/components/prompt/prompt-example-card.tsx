@@ -39,13 +39,15 @@ export const PromptExampleCard = ({
       <div className="flex justify-between gap-2 p-4">
         <div>
           <h4 className="block text-lg font-semibold">
-            {Object.entries(example.exampleInput).map((entry, index) => (
-              <span key={entry[0]}>
-                {capitalizeFirstCharacter(entry[0])}: {entry[1]}
-                {index !== Object.entries(example.exampleInput).length - 1 &&
-                  ", "}
-              </span>
-            ))}
+            {example.exampleInput
+              ? Object.entries(example.exampleInput).map((entry, index) => (
+                  <span key={entry[0]}>
+                    {capitalizeFirstCharacter(entry[0])}: {entry[1]}
+                    {index !==
+                      Object.entries(example.exampleInput).length - 1 && ", "}
+                  </span>
+                ))
+              : prompt.metadata.title}
           </h4>
           <div className="mt-1 flex items-center gap-2">
             <AddressAvatar address={prompt.owner} />
