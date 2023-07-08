@@ -3,15 +3,22 @@ import { useForm } from "react-hook-form";
 import { Button } from "@components/basic/button";
 import { Input } from "@components/basic/input";
 import { Prompt } from "@lib/prompts/types";
+import { useAddPromptExample } from "@lib/prompts/use-add-prompt-example";
 import { capitalizeFirstCharacter } from "@utils/capitalize-first-character";
 import { extractParameters } from "@utils/extract-parameters";
 
 interface TestPromptFormProps {
   prompt: Prompt;
+  onExecute?: () => void;
 }
 
-export const TestPromptForm = ({ prompt }: TestPromptFormProps) => {
+export const TestPromptForm = ({ prompt, onExecute }: TestPromptFormProps) => {
   const promptParameters = extractParameters(prompt.metadata.prompt);
+  const { mutate: addPromptExample } = useAddPromptExample({
+    onSuccess() {
+      onExecute?.();
+    },
+  });
 
   const {
     register,
@@ -24,7 +31,16 @@ export const TestPromptForm = ({ prompt }: TestPromptFormProps) => {
       return acc.replace(`<${parameter}>`, data[parameter]);
     }, prompt.metadata.prompt);
 
-    console.log("promptWithParameters", promptWithParameters);
+    console.log("Prompt: ", promptWithParameters);
+
+    // TODO: execute prompt
+
+    addPromptExample({
+      promptId: prompt.id,
+      exampleInput: data,
+      // TODO: get output from response
+      exampleOutput: "Day 1: Breakfast: Eggs",
+    });
   });
 
   return (
