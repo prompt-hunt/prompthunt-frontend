@@ -2,7 +2,7 @@ import Image from "next/image";
 
 import { Address } from "@components/address";
 import { AddressAvatar } from "@components/address-avatar";
-import UpvoteIcon from "@icons/upvote.svg";
+import { CopyButton } from "@components/copy-button";
 import { capitalizeFirstCharacter } from "@utils/capitalize-first-character";
 
 import type { Prompt, PromptExample } from "@lib/prompts/types";
@@ -29,7 +29,9 @@ export const PromptExampleCard = ({
             className="object-cover"
           />
         ) : (
-          <div className="h-full bg-base-300 p-4">{example.exampleOutput}</div>
+          <div className="h-full bg-base-300 p-4">
+            {example.exampleOutput.slice(0, 300)}
+          </div>
         )}
       </div>
 
@@ -51,10 +53,7 @@ export const PromptExampleCard = ({
         </div>
 
         <div>
-          <button className="hover rounded-btn flex w-12 flex-col items-center border border-base-content p-2 hover:bg-base-content/20">
-            <UpvoteIcon className="h-4 w-4" />
-            <span className="font-bold">{prompt.upvotes}</span>
-          </button>
+          <CopyButton text={example.exampleOutput} />
         </div>
       </div>
     </div>

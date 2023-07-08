@@ -1,19 +1,17 @@
-import { CheckIcon, DocumentDuplicateIcon } from "@heroicons/react/24/solid";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { useState } from "react";
 
 import { Address } from "@components/address";
 import { AddressAvatar } from "@components/address-avatar";
 import { Button } from "@components/basic/button";
 import { Input } from "@components/basic/input";
 import { Spinner } from "@components/basic/spinner";
+import { CopyButton } from "@components/copy-button";
 import { PromptExamplesList } from "@components/prompt/prompt-examples-list";
 import UpvoteIcon from "@icons/upvote.svg";
 import { PromptWithExamples } from "@lib/prompts/types";
 import { usePrompt } from "@lib/prompts/use-prompt";
 import { capitalizeFirstCharacter } from "@utils/capitalize-first-character";
-import { copyToClipboard } from "@utils/copy-to-clipboard";
 
 const extractParameters = (str: string) => {
   const regex = /<([^>]+)>/g;
@@ -28,16 +26,6 @@ const extractParameters = (str: string) => {
 };
 
 const PromptInfo = ({ prompt }: { prompt: PromptWithExamples }) => {
-  const [copied, setCopied] = useState(false);
-
-  const onCopyPrompt = () => {
-    copyToClipboard(prompt.metadata.prompt);
-    setCopied(true);
-    setTimeout(() => {
-      setCopied(false);
-    }, 2000);
-  };
-
   const promptParameters = extractParameters(prompt.metadata.prompt);
 
   return (
@@ -72,16 +60,7 @@ const PromptInfo = ({ prompt }: { prompt: PromptWithExamples }) => {
             </div>
 
             <div className="flex gap-2">
-              <button
-                onClick={onCopyPrompt}
-                className="hover rounded-btn flex w-12 flex-col items-center justify-center border border-base-content p-2 hover:bg-base-content/20"
-              >
-                {copied ? (
-                  <CheckIcon className="h-6 w-6" />
-                ) : (
-                  <DocumentDuplicateIcon className="h-6 w-6" />
-                )}
-              </button>
+              <CopyButton text={prompt.metadata.prompt} />
               <button className="hover rounded-btn flex w-12 flex-col items-center border border-base-content p-2 hover:bg-base-content/20">
                 <UpvoteIcon className="h-4 w-4" />
                 <span className="font-bold">{prompt.upvotes}</span>
