@@ -53,7 +53,7 @@ const CreatePage: NextPage = () => {
   });
 
   return (
-    <div className="flex">
+    <div className="flex flex-col gap-10 md:flex-row">
       <div className="flex-1">
         <div className="flex items-center justify-between">
           <h1 className="text-3xl font-bold">Create your prompt</h1>
@@ -139,7 +139,17 @@ const CreatePage: NextPage = () => {
         </form>
       </div>
 
-      <div className="flex-1"></div>
+      <div className="flex flex-1 flex-col">
+        <div className="flex justify-end">
+          <Button>Share</Button>
+        </div>
+        <div className="rounded-box mt-4 flex-1 bg-base-200 p-4">
+          <p>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur
+            nostrum quas deserunt a numquam ad ab quo? Excepturi, beatae ab?
+          </p>
+        </div>
+      </div>
     </div>
   );
 };
