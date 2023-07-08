@@ -1,7 +1,9 @@
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 
 import { Button } from "@components/basic/button";
 import { Input } from "@components/basic/input";
+import { useExecuteGptPrompt } from "@lib/gpt/use-execute-gpt-prompt";
 import { Prompt } from "@lib/prompts/types";
 import { useAddPromptExample } from "@lib/prompts/use-add-prompt-example";
 import { capitalizeFirstCharacter } from "@utils/capitalize-first-character";
@@ -20,26 +22,36 @@ export const TestPromptForm = ({ prompt, onExecute }: TestPromptFormProps) => {
     },
   });
 
+  const [result, setResult] = useState("");
+
   const {
     register,
     handleSubmit,
     formState: { errors },
+    getValues,
   } = useForm();
+
+  const { mutate: executePrompt, isLoading: isLoadingExecute } =
+    useExecuteGptPrompt({
+      onSuccess(result) {
+        setResult(result);
+        addPromptExample({
+          promptId: prompt.id,
+          exampleInput: getValues(),
+          // TODO: get output from response
+          exampleOutput: result,
+        });
+      },
+    });
 
   const onSubmit = handleSubmit(async (data) => {
     const promptWithParameters = promptParameters.reduce((acc, parameter) => {
       return acc.replace(`<${parameter}>`, data[parameter]);
     }, prompt.metadata.prompt);
 
-    console.log("Prompt: ", promptWithParameters);
-
     // TODO: execute prompt
-
-    addPromptExample({
-      promptId: prompt.id,
-      exampleInput: data,
-      // TODO: get output from response
-      exampleOutput: "Day 1: Breakfast: Eggs",
+    executePrompt({
+      prompt: promptWithParameters,
     });
   });
 
@@ -64,11 +76,15 @@ export const TestPromptForm = ({ prompt, onExecute }: TestPromptFormProps) => {
         className="mt-4"
         block
         type="submit"
-        loading={isLoading}
-        disabled={isLoading}
+        loading={isLoading || isLoadingExecute}
+        disabled={isLoading || isLoadingExecute}
       >
         Run
       </Button>
+      <div className="rounded-box mt-4 bg-base-200 p-4">
+        <span className="font-bold">Result:</span>
+        <p>{result}</p>
+      </div>
     </form>
   );
 };

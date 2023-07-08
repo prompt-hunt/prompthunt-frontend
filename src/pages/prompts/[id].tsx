@@ -96,14 +96,6 @@ const PromptInfo = ({ prompt, onUpvote, onExecute }: PromptInfoProps) => {
         <div className="flex-1">
           <h4 className="mb-6 text-2xl font-semibold">Try the prompt</h4>
           <TestPromptForm prompt={prompt} onExecute={onExecute} />
-          <div className="rounded-box mt-4 bg-base-200 p-4">
-            <span className="font-bold">Result:</span>
-            <p>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit.
-              Consectetur nostrum quas deserunt a numquam ad ab quo? Excepturi,
-              beatae ab?
-            </p>
-          </div>
         </div>
       </div>
 

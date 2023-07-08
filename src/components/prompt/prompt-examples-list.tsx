@@ -15,9 +15,9 @@ export const PromptExamplesList = ({
     <div className={className}>
       <h4 className="mb-6 text-2xl font-semibold">What others have done</h4>
       <div className="grid grid-cols-1 gap-6 md:grid-cols-autofill">
-        {prompt.examples?.map((example) => (
+        {prompt.examples?.map((example, index) => (
           <PromptExampleCard
-            key={JSON.stringify(example.exampleInput)}
+            key={JSON.stringify(example.exampleInput) + index}
             prompt={prompt}
             example={example}
           />

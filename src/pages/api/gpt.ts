@@ -13,8 +13,6 @@ export default async function handler(
     });
     const openai = new OpenAIApi(configuration);
 
-    console.log("Api key: ", apiKey);
-
     const completion = await openai.createCompletion({
       model: "text-davinci-003",
       prompt: req.body.prompt,
