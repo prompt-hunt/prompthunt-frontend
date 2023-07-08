@@ -13,7 +13,7 @@ export const useHasUpvotedPrompt = (params: UsePromptParams) => {
   const promptHunt = usePromptHunt();
 
   return useQuery(["has-upvoted-prompt", promptId, address], async () => {
-    if (!promptHunt) return;
+    if (!promptHunt) return false;
 
     /* Get prompt examples */
     const eventFilter = promptHunt.filters.PromptUpvoted(promptId, address);

@@ -88,11 +88,13 @@ export interface PromptHuntInterface extends utils.Interface {
     "PromptCreated(uint256,address,string)": EventFragment;
     "PromptExampleAdded(uint256,address,string)": EventFragment;
     "PromptUpvoted(uint256,address)": EventFragment;
+    "UserUpvotesUpdated(address,uint256)": EventFragment;
   };
 
   getEvent(nameOrSignatureOrTopic: "PromptCreated"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "PromptExampleAdded"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "PromptUpvoted"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "UserUpvotesUpdated"): EventFragment;
 }
 
 export interface PromptCreatedEventObject {
@@ -130,6 +132,18 @@ export type PromptUpvotedEvent = TypedEvent<
 >;
 
 export type PromptUpvotedEventFilter = TypedEventFilter<PromptUpvotedEvent>;
+
+export interface UserUpvotesUpdatedEventObject {
+  user: string;
+  totalUpvotes: BigNumber;
+}
+export type UserUpvotesUpdatedEvent = TypedEvent<
+  [string, BigNumber],
+  UserUpvotesUpdatedEventObject
+>;
+
+export type UserUpvotesUpdatedEventFilter =
+  TypedEventFilter<UserUpvotesUpdatedEvent>;
 
 export interface PromptHunt extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
@@ -291,6 +305,15 @@ export interface PromptHunt extends BaseContract {
       id?: PromiseOrValue<BigNumberish> | null,
       upvoter?: PromiseOrValue<string> | null,
     ): PromptUpvotedEventFilter;
+
+    "UserUpvotesUpdated(address,uint256)"(
+      user?: PromiseOrValue<string> | null,
+      totalUpvotes?: null,
+    ): UserUpvotesUpdatedEventFilter;
+    UserUpvotesUpdated(
+      user?: PromiseOrValue<string> | null,
+      totalUpvotes?: null,
+    ): UserUpvotesUpdatedEventFilter;
   };
 
   estimateGas: {

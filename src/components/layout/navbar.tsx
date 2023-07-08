@@ -55,8 +55,9 @@ export const Navbar = () => {
           leaveTo="opacity-0"
         >
           <div className="flex items-center gap-4">
-            <div className="hidden items-center gap-2 md:flex">
+            <div className="hidden items-center gap-2 lg:flex">
               <NavItem text="Create prompt" href="/create" />
+              <NavItem text="Top Engineers" href="/top-users" />
             </div>
             <ThemeToggle />
             <ChainSwitch />
@@ -84,7 +85,7 @@ export const Navbar = () => {
       <MobileMenu
         showMenu={showMenu}
         setShowMenu={setShowMenu}
-        className="md:hidden"
+        className="lg:hidden"
       />
     </header>
   );

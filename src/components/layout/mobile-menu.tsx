@@ -65,6 +65,11 @@ export const MobileMenu = ({
         <Container>
           <nav className="flex flex-col space-y-2">
             <NavItem text="Create prompt" href="/create" onClick={closeMenu} />
+            <NavItem
+              text="Top engineers"
+              href="/top-users"
+              onClick={closeMenu}
+            />
           </nav>
         </Container>
       </div>

@@ -74,6 +74,25 @@ export const PromptHuntAbi = [
     type: "event",
   },
   {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "address",
+        name: "user",
+        type: "address",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "totalUpvotes",
+        type: "uint256",
+      },
+    ],
+    name: "UserUpvotesUpdated",
+    type: "event",
+  },
+  {
     inputs: [
       {
         internalType: "uint256",
