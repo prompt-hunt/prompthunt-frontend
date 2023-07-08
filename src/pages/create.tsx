@@ -1,4 +1,5 @@
 import { ChevronDownIcon } from "@heroicons/react/24/solid";
+import Image from "next/image";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -14,8 +15,8 @@ import { Input } from "@components/basic/input";
 import { Label } from "@components/basic/label";
 import { TextArea } from "@components/basic/textarea/textarea";
 import { PROMPT_CATEGORIES, PROMPT_MODELS } from "@constants/prompts";
-import { useExecuteGptPrompt } from "@lib/gpt/use-execute-gpt-prompt";
 import { useCreatePrompt } from "@lib/prompts/use-create-prompt";
+import { useExecutePrompt } from "@lib/prompts/use-execute-prompt";
 import { capitalizeFirstCharacter } from "@utils/capitalize-first-character";
 import { extractParameters } from "@utils/extract-parameters";
 
@@ -45,7 +46,7 @@ const CreatePage: NextPage = () => {
   });
 
   const { mutate: executePrompt, isLoading: isLoadingExecute } =
-    useExecuteGptPrompt({
+    useExecutePrompt({
       onSuccess(result) {
         setResult(result);
       },
@@ -76,6 +77,7 @@ const CreatePage: NextPage = () => {
 
     executePrompt({
       prompt: promptWithParameters,
+      type: activeModel,
     });
   });
 
@@ -194,9 +196,22 @@ const CreatePage: NextPage = () => {
       </div>
 
       <div className="flex flex-1 flex-col gap-4">
-        <div className="rounded-box flex-1 bg-base-200 p-4">
-          <p>{result}</p>
-        </div>
+        {result.startsWith("http") ? (
+          <div className="relative h-96 w-full">
+            <Image
+              src={result}
+              fill
+              alt="Generated image"
+              className="rounded-box overflow-hidden object-cover"
+              // width={100}
+              // height={100}
+            />
+          </div>
+        ) : (
+          <div className="rounded-box flex-1 bg-base-200 p-4">
+            <p>{result}</p>
+          </div>
+        )}
         <div className="flex justify-end">
           <Button onClick={onShare} loading={isLoading} disabled={isLoading}>
             Share
