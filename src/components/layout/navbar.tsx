@@ -56,7 +56,8 @@ export const Navbar = () => {
         >
           <div className="flex items-center gap-4">
             <div className="hidden items-center gap-2 lg:flex">
-              <NavItem text="Create prompt" href="/create" />
+              <NavItem text="Feed" href="/feed" />
+              <NavItem text="Generate" href="/create" />
               <NavItem text="Top Engineers" href="/top-users" />
               <NavItem text="Donate" href="/donate" />
             </div>

@@ -64,7 +64,8 @@ export const MobileMenu = ({
       <div className="rounded-b-box absolute top-full z-30 w-full bg-base-100 pb-6">
         <Container>
           <nav className="flex flex-col space-y-2">
-            <NavItem text="Create prompt" href="/create" onClick={closeMenu} />
+            <NavItem text="Feed" href="/feed" onClick={closeMenu} />
+            <NavItem text="Generate" href="/create" onClick={closeMenu} />
             <NavItem
               text="Top engineers"
               href="/top-users"
