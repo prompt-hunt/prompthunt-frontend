@@ -5,6 +5,7 @@ import { getDefaultWallets, RainbowKitProvider } from "@rainbow-me/rainbowkit";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 // import { ReactQueryDevtools } from "@tanstack/react-query-devtools/build/lib/devtools";
 // import dynamic from "next/dynamic";
+import { Space_Grotesk } from "next/font/google";
 import { DefaultSeo } from "next-seo";
 import { ThemeProvider } from "next-themes";
 // import { useEffect, useState } from "react";
@@ -50,6 +51,9 @@ const queryClient = new QueryClient();
 //   { ssr: false },
 // );
 
+// If loading a variable font, you don't need to specify the font weight
+const spaceGrotesk = Space_Grotesk({ subsets: ["latin"] });
+
 function MyApp({ Component, pageProps }: AppProps) {
   // const [showReactQueryDevtools, setShowReactQueryDevtools] = useState(false);
   // useEffect(() => {
@@ -59,7 +63,9 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   const getLayout =
     (Component as ExtendedPage).getLayout ||
-    ((page) => <DefaultLayout>{page}</DefaultLayout>);
+    ((page) => (
+      <DefaultLayout className={spaceGrotesk.className}>{page}</DefaultLayout>
+    ));
 
   return (
     <QueryClientProvider client={queryClient}>
