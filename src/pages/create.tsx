@@ -1,9 +1,7 @@
 import { ChevronDownIcon } from "@heroicons/react/24/solid";
-import axios from "axios";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import { useMutation } from "wagmi";
 
 import { Button } from "@components/basic/button";
 import {
@@ -16,6 +14,7 @@ import { Input } from "@components/basic/input";
 import { Label } from "@components/basic/label";
 import { TextArea } from "@components/basic/textarea/textarea";
 import { PROMPT_CATEGORIES, PROMPT_MODELS } from "@constants/prompts";
+import { useExecuteGptPrompt } from "@lib/gpt/use-execute-gpt-prompt";
 import { useCreatePrompt } from "@lib/prompts/use-create-prompt";
 import { capitalizeFirstCharacter } from "@utils/capitalize-first-character";
 import { extractParameters } from "@utils/extract-parameters";
@@ -45,19 +44,12 @@ const CreatePage: NextPage = () => {
     },
   });
 
-  const { mutate: executePrompt, isLoading: isLoadingExecute } = useMutation(
-    async ({ prompt }: { prompt: string }) => {
-      const res = await axios.post("/api/gpt", {
-        prompt,
-      });
-      return res.data.result;
-    },
-    {
+  const { mutate: executePrompt, isLoading: isLoadingExecute } =
+    useExecuteGptPrompt({
       onSuccess(result) {
         setResult(result);
       },
-    },
-  );
+    });
 
   const {
     register,
@@ -201,14 +193,14 @@ const CreatePage: NextPage = () => {
         </form>
       </div>
 
-      <div className="flex flex-1 flex-col">
+      <div className="flex flex-1 flex-col gap-4">
+        <div className="rounded-box flex-1 bg-base-200 p-4">
+          <p>{result}</p>
+        </div>
         <div className="flex justify-end">
           <Button onClick={onShare} loading={isLoading} disabled={isLoading}>
             Share
           </Button>
-        </div>
-        <div className="rounded-box mt-4 flex-1 bg-base-200 p-4">
-          <p>{result}</p>
         </div>
       </div>
     </div>

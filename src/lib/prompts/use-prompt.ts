@@ -1,4 +1,5 @@
-import { useChainId, useQuery } from "wagmi";
+import { useQuery } from "@tanstack/react-query";
+import { useChainId } from "wagmi";
 
 import { DEPLOYMENT_BLOCK } from "@constants/addresses";
 import { usePromptHunt } from "@hooks/use-prompt-hunt";
