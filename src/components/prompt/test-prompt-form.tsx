@@ -1,11 +1,12 @@
+import Image from "next/image";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 
 import { Button } from "@components/basic/button";
 import { Input } from "@components/basic/input";
-import { useExecuteGptPrompt } from "@lib/gpt/use-execute-gpt-prompt";
 import { Prompt } from "@lib/prompts/types";
 import { useAddPromptExample } from "@lib/prompts/use-add-prompt-example";
+import { useExecutePrompt } from "@lib/prompts/use-execute-prompt";
 import { capitalizeFirstCharacter } from "@utils/capitalize-first-character";
 import { extractParameters } from "@utils/extract-parameters";
 
@@ -32,7 +33,7 @@ export const TestPromptForm = ({ prompt, onExecute }: TestPromptFormProps) => {
   } = useForm();
 
   const { mutate: executePrompt, isLoading: isLoadingExecute } =
-    useExecuteGptPrompt({
+    useExecutePrompt({
       onSuccess(result) {
         setResult(result);
         addPromptExample({
@@ -52,6 +53,7 @@ export const TestPromptForm = ({ prompt, onExecute }: TestPromptFormProps) => {
     // TODO: execute prompt
     executePrompt({
       prompt: promptWithParameters,
+      type: prompt.metadata.model,
     });
   });
 
@@ -82,8 +84,21 @@ export const TestPromptForm = ({ prompt, onExecute }: TestPromptFormProps) => {
         Run
       </Button>
       <div className="rounded-box mt-4 bg-base-200 p-4">
-        <span className="font-bold">Result:</span>
-        <p>{result}</p>
+        <div className="font-bold">Result:</div>
+        {result.startsWith("http") ? (
+          <div className="relative mt-2 h-96 w-full">
+            <Image
+              src={result}
+              fill
+              alt="Generated image"
+              className="rounded-box overflow-hidden object-cover"
+              // width={100}
+              // height={100}
+            />
+          </div>
+        ) : (
+          <p>{result}</p>
+        )}
       </div>
     </form>
   );

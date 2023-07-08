@@ -91,7 +91,9 @@ const CreatePage: NextPage = () => {
       category: category,
       // If stable diffusion use the result of the prompt
       image:
-        "https://firebasestorage.googleapis.com/v0/b/promptbase.appspot.com/o/DALLE_IMAGES%2FCrpcqah7YdgU133cBw6H%2Fresized%2F1687293200789_800x800.webp?alt=media&token=c5f63804-7181-4039-bf15-1a24bf98afea",
+        activeModel === "GPT"
+          ? "https://firebasestorage.googleapis.com/v0/b/promptbase.appspot.com/o/DALLE_IMAGES%2FCrpcqah7YdgU133cBw6H%2Fresized%2F1687293200789_800x800.webp?alt=media&token=c5f63804-7181-4039-bf15-1a24bf98afea"
+          : result,
       exampleInput: parameters,
       // Use result of the prompt
       exampleOutput: result,
