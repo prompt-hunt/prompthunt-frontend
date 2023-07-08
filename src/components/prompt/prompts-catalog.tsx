@@ -51,8 +51,6 @@ const PromptsCatalogInner = ({
     query,
   });
 
-  console.log("Is loading: ", isLoading);
-
   if (isLoading) {
     return (
       <div className="my-14 flex justify-center">
