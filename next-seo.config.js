@@ -1,6 +1,6 @@
-const title = "My App";
-const description = "This is my awesome app";
-const url = "https://beta.cryvia.xyz/";
+const title = "PromptHunt";
+const description = "This open archive of AI prompts";
+const url = "";
 
 // eslint-disable-next-line import/no-anonymous-default-export
 export default {

@@ -11,7 +11,8 @@ export interface PromptMetadata {
   prompt: string;
   model: string;
   image: string;
-
+  exampleInput: Record<string, string>;
+  exampleOutput: string;
   category: string;
 }
 

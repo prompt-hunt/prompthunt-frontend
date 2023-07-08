@@ -30,16 +30,25 @@ const CategoryButton = ({
   );
 };
 
+interface PromptsCatalogInnerProps {
+  category: string;
+  model: string;
+  query?: string;
+}
+
 const PromptsCatalogInner = ({
   category,
   model,
-}: {
-  category: string;
-  model: string;
-}) => {
-  const { data: prompts, isLoading } = usePrompts({
+  query,
+}: PromptsCatalogInnerProps) => {
+  const {
+    data: prompts,
+    isLoading,
+    refetch,
+  } = usePrompts({
     category,
     model,
+    query,
   });
 
   if (isLoading) {
@@ -60,13 +69,23 @@ const PromptsCatalogInner = ({
   return (
     <div className="grid grid-cols-1 gap-6 md:grid-cols-autofill">
       {prompts?.map((prompt) => (
-        <PromptCard key={prompt.id} prompt={prompt} linkToPage />
+        <PromptCard
+          key={prompt.id}
+          prompt={prompt}
+          linkToPage
+          onUpvote={refetch}
+        />
       ))}
     </div>
   );
 };
 
-export const PromptsCatalog = ({ className }: { className?: string }) => {
+interface PromptsCatalogProps {
+  className?: string;
+  query?: string;
+}
+
+export const PromptsCatalog = ({ className, query }: PromptsCatalogProps) => {
   const [activeCategory, setActiveCategory] = useState("");
   const [activeModel, setActiveModel] = useState("");
 
@@ -107,7 +126,11 @@ export const PromptsCatalog = ({ className }: { className?: string }) => {
           />
         ))}
       </div>
-      <PromptsCatalogInner category={activeCategory} model={activeModel} />
+      <PromptsCatalogInner
+        category={activeCategory}
+        model={activeModel}
+        query={query}
+      />
     </div>
   );
 };

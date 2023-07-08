@@ -36,6 +36,13 @@ export const usePrompt = (params: UsePromptParams) => {
       const examples = await Promise.all(
         dataUris.map((dataUri) => fetchFromIpfs<PromptExample>(dataUri)),
       );
+      const promptExamples: PromptExample[] = [
+        {
+          exampleInput: metadata.exampleInput,
+          exampleOutput: metadata.exampleOutput,
+        },
+        ...examples,
+      ];
 
       return {
         id: promptId,
@@ -43,7 +50,7 @@ export const usePrompt = (params: UsePromptParams) => {
         dataUri,
         upvotes: prompt.upvotes.toNumber(),
         metadata,
-        examples,
+        examples: promptExamples,
       };
     },
   );

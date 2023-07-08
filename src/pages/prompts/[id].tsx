@@ -1,3 +1,4 @@
+import cx from "classnames";
 import Image from "next/image";
 import { useRouter } from "next/router";
 
@@ -9,9 +10,32 @@ import { PromptExamplesList } from "@components/prompt/prompt-examples-list";
 import { TestPromptForm } from "@components/prompt/test-prompt-form";
 import UpvoteIcon from "@icons/upvote.svg";
 import { PromptWithExamples } from "@lib/prompts/types";
+import { useHasUpvotedPrompt } from "@lib/prompts/use-has-upvoted-prompt";
 import { usePrompt } from "@lib/prompts/use-prompt";
+import { useUpvotePrompt } from "@lib/prompts/use-upvote-prompt";
 
-const PromptInfo = ({ prompt }: { prompt: PromptWithExamples }) => {
+interface PromptInfoProps {
+  prompt: PromptWithExamples;
+  onUpvote?: () => void;
+}
+
+const PromptInfo = ({ prompt, onUpvote }: PromptInfoProps) => {
+  const { data: hasUpvoted, refetch } = useHasUpvotedPrompt({
+    promptId: prompt.id,
+  });
+  const { mutate: upvotePrompt } = useUpvotePrompt({
+    onSuccess() {
+      refetch();
+      onUpvote?.();
+    },
+  });
+
+  const handleUpvotePrompt = async () => {
+    upvotePrompt({
+      promptId: prompt.id,
+    });
+  };
+
   return (
     <div>
       <div className="flex flex-col gap-14 md:flex-row lg:gap-20">
@@ -45,7 +69,16 @@ const PromptInfo = ({ prompt }: { prompt: PromptWithExamples }) => {
 
             <div className="flex gap-2">
               <CopyButton text={prompt.metadata.prompt} />
-              <button className="hover rounded-btn flex w-12 flex-col items-center border border-base-content p-2 hover:bg-base-content/20">
+              <button
+                onClick={handleUpvotePrompt}
+                className={cx(
+                  "hover rounded-btn flex w-12 flex-col items-center border border-base-content p-2 hover:bg-base-content/20",
+                  hasUpvoted
+                    ? "bg-base-content/20 text-primary"
+                    : "bg-transparent",
+                )}
+                disabled={hasUpvoted}
+              >
                 <UpvoteIcon className="h-4 w-4" />
                 <span className="font-bold">{prompt.upvotes}</span>
               </button>
@@ -75,7 +108,7 @@ const PromptInfo = ({ prompt }: { prompt: PromptWithExamples }) => {
 };
 
 const PromptPageInner = ({ id }: { id: number }) => {
-  const { data: prompt } = usePrompt({
+  const { data: prompt, refetch } = usePrompt({
     promptId: id,
   });
 
@@ -87,7 +120,7 @@ const PromptPageInner = ({ id }: { id: number }) => {
     );
   }
 
-  return <PromptInfo prompt={prompt} />;
+  return <PromptInfo prompt={prompt} onUpvote={refetch} />;
 };
 
 const PromptPage = () => {
