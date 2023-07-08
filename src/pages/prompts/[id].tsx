@@ -24,7 +24,7 @@ const PromptInfo = ({ prompt, onUpvote, onExecute }: PromptInfoProps) => {
   const { data: hasUpvoted, refetch } = useHasUpvotedPrompt({
     promptId: prompt.id,
   });
-  const { mutate: upvotePrompt } = useUpvotePrompt({
+  const { mutate: upvotePrompt, isLoading } = useUpvotePrompt({
     onSuccess() {
       refetch();
       onUpvote?.();
@@ -80,8 +80,14 @@ const PromptInfo = ({ prompt, onUpvote, onExecute }: PromptInfoProps) => {
                 )}
                 disabled={hasUpvoted}
               >
-                <UpvoteIcon className="h-4 w-4" />
-                <span className="font-bold">{prompt.upvotes}</span>
+                {isLoading ? (
+                  <Spinner />
+                ) : (
+                  <span>
+                    <UpvoteIcon className="h-4 w-4" />
+                    <span className="font-bold">{prompt.upvotes}</span>
+                  </span>
+                )}
               </button>
             </div>
           </div>

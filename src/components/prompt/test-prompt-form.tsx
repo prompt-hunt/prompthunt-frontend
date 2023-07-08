@@ -14,7 +14,7 @@ interface TestPromptFormProps {
 
 export const TestPromptForm = ({ prompt, onExecute }: TestPromptFormProps) => {
   const promptParameters = extractParameters(prompt.metadata.prompt);
-  const { mutate: addPromptExample } = useAddPromptExample({
+  const { mutate: addPromptExample, isLoading } = useAddPromptExample({
     onSuccess() {
       onExecute?.();
     },
@@ -60,8 +60,8 @@ export const TestPromptForm = ({ prompt, onExecute }: TestPromptFormProps) => {
           />
         </div>
       ))}
-      <Button className="mt-4" block type="submit">
-        Submit
+      <Button className="mt-4" block type="submit" loading={isLoading}>
+        Run
       </Button>
     </form>
   );

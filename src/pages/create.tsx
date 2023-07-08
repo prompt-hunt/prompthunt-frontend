@@ -34,7 +34,7 @@ const CreatePage: NextPage = () => {
   const [category, setCategory] = useState(PROMPT_CATEGORIES[0]);
   const [activeModel, setActiveModel] = useState(PROMPT_MODELS[0]);
 
-  const { mutate: createPrompt } = useCreatePrompt({
+  const { mutate: createPrompt, isLoading } = useCreatePrompt({
     onSuccess(receipt) {
       const promptId = receipt?.events?.find((e) => e.event === "PromptCreated")
         ?.args?.id;
@@ -175,7 +175,9 @@ const CreatePage: NextPage = () => {
 
       <div className="flex flex-1 flex-col">
         <div className="flex justify-end">
-          <Button onClick={onShare}>Share</Button>
+          <Button onClick={onShare} loading={isLoading}>
+            Share
+          </Button>
         </div>
         <div className="rounded-box mt-4 flex-1 bg-base-200 p-4">
           <p>

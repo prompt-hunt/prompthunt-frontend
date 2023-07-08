@@ -4,6 +4,7 @@ import Link from "next/link";
 
 import { Address } from "@components/address";
 import { AddressAvatar } from "@components/address-avatar";
+import { Spinner } from "@components/basic/spinner";
 import UpvoteIcon from "@icons/upvote.svg";
 import { useHasUpvotedPrompt } from "@lib/prompts/use-has-upvoted-prompt";
 import { useUpvotePrompt } from "@lib/prompts/use-upvote-prompt";
@@ -20,7 +21,7 @@ export const PromptCard = ({ prompt, onUpvote }: PromptCardProps) => {
   const { data: hasUpvoted, refetch } = useHasUpvotedPrompt({
     promptId: prompt.id,
   });
-  const { mutate: upvotePrompt } = useUpvotePrompt({
+  const { mutate: upvotePrompt, isLoading } = useUpvotePrompt({
     onSuccess() {
       refetch();
       onUpvote?.();
@@ -71,13 +72,19 @@ export const PromptCard = ({ prompt, onUpvote }: PromptCardProps) => {
           <button
             onClick={handleUpvotePrompt}
             className={cx(
-              "hover rounded-btn flex w-12 flex-col items-center border border-base-content p-2 hover:bg-base-content/20",
+              "hover rounded-btn flex w-12 h-full justify-center flex-col items-center border border-base-content p-2 hover:bg-base-content/20",
               hasUpvoted ? "bg-base-content/20 text-primary" : "bg-transparent",
             )}
             disabled={hasUpvoted}
           >
-            <UpvoteIcon className="h-4 w-4" />
-            <span className="font-bold">{prompt.upvotes}</span>
+            {isLoading ? (
+              <Spinner />
+            ) : (
+              <span>
+                <UpvoteIcon className="h-4 w-4" />
+                <span className="font-bold">{prompt.upvotes}</span>
+              </span>
+            )}
           </button>
         </div>
       </div>
