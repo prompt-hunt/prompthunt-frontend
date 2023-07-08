@@ -10,9 +10,9 @@ export const BlockchainSection = () => {
         </h3>
         <p className="max-w-[36rem] text-center text-lg text-base-content-neutral">
           Our prompts database is built with blockchain and decentralized
-          storage to make it available for everyone to build on top. Build your
-          own algorithm on top of PromptsHunt data to search for the best
-          prompts for your specific use case.
+          storage to make it available for everyone to leverage and build on
+          top. Create your own algorithm on top of PromptsHunt data to search
+          for the best prompts for your specific use case.
         </p>
         <a
           href={"https://github.com/prompt-hunt/prompthunt-contracts/"}
