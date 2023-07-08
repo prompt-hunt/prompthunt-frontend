@@ -67,7 +67,7 @@ export const Navbar = () => {
 
             <button
               onClick={() => setShowMenu((show) => !show)}
-              className="rounded-btn p-1.5 hover:bg-base-200 md:hidden"
+              className="rounded-btn p-1.5 hover:bg-base-200 lg:hidden"
               aria-expanded="false"
             >
               <span className="sr-only">

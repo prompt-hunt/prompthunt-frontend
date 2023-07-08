@@ -1,5 +1,6 @@
 import {
   gnosis,
+  goerli,
   hardhat,
   polygon,
   polygonMumbai,
@@ -17,7 +18,7 @@ export type ChainMap = { [chainId: number]: string };
 const getChains = () => {
   switch (env.NEXT_PUBLIC_CHAIN) {
     case "localhost":
-      return [hardhat, gnosis, scrollTestnet];
+      return [hardhat, gnosis, scrollTestnet, goerli];
     case "testnet":
       return [gnosis, scrollTestnet];
     case "mainnet":
@@ -37,4 +38,5 @@ export const CHAIN_ICON: { [chainId: number]: Icon } = {
   [polygon.id]: PolygonIcon,
   [gnosis.id]: GnosisIcon,
   [scrollTestnet.id]: ScrollIcon,
+  [goerli.id]: PolygonIcon,
 };
