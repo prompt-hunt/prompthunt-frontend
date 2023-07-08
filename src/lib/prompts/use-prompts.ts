@@ -73,7 +73,8 @@ export const usePrompts = (params?: UsePromptsParams) => {
           )
         : filteredPromptsByCategory;
 
-      return filteredPrompts;
+      /* Order by upvotes */
+      return filteredPrompts.sort((a, b) => b.upvotes - a.upvotes);
     },
     {
       enabled: params?.enabled,
