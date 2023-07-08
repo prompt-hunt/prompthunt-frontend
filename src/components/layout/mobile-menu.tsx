@@ -70,6 +70,7 @@ export const MobileMenu = ({
               href="/top-users"
               onClick={closeMenu}
             />
+            <NavItem text="Donate" href="/donate" onClick={closeMenu} />
           </nav>
         </Container>
       </div>
