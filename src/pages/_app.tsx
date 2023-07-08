@@ -1,3 +1,4 @@
+/* eslint-disable import/order */
 import "../styles/globals.css";
 import "@rainbow-me/rainbowkit/styles.css";
 
@@ -8,7 +9,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { DefaultSeo } from "next-seo";
 import { ThemeProvider } from "next-themes";
 // import { useEffect, useState } from "react";
-import { configureChains, createClient, WagmiConfig } from "wagmi";
+import { configureChains, WagmiConfig } from "wagmi";
 import { alchemyProvider } from "wagmi/providers/alchemy";
 import { publicProvider } from "wagmi/providers/public";
 
@@ -20,6 +21,7 @@ import SEO from "../../next-seo.config";
 
 import type { ExtendedPage } from "@types";
 import type { AppProps } from "next/app";
+import { demoAppInfo, wagmiConfig, chains as rChains } from "@lib/config/rainbow-kit";
 
 const { chains, provider } = configureChains(CHAINS, [
   alchemyProvider({ apiKey: env.NEXT_PUBLIC_ALCHEMY_API_KEY }),
@@ -31,12 +33,12 @@ const { connectors } = getDefaultWallets({
   chains,
 });
 
-const client = createClient({
-  autoConnect: true,
-  connectors,
-  provider,
-  persister: null,
-});
+// const client = createClient({
+//   autoConnect: true,
+//   connectors,
+//   provider,
+//   persister: null,
+// });
 
 const queryClient = new QueryClient();
 // const ReactQueryDevtoolsProduction = dynamic(
@@ -66,8 +68,8 @@ function MyApp({ Component, pageProps }: AppProps) {
       {/* <ReactQueryDevtools initialIsOpen={false} /> */}
       {/* {showReactQueryDevtools && <ReactQueryDevtoolsProduction />} */}
 
-      <WagmiConfig client={client}>
-        <RainbowKitProvider chains={chains}>
+      <WagmiConfig config={wagmiConfig}>
+        <RainbowKitProvider appInfo={demoAppInfo} chains={rChains}>
           <ThemeProvider>
             <DefaultSeo {...SEO} />
             {getLayout(<Component {...pageProps} />)}

@@ -17,7 +17,10 @@
     "@metamask/jazzicon": "^2.0.0",
     "@radix-ui/react-dialog": "^1.0.0",
     "@radix-ui/react-tooltip": "^1.0.0",
-    "@rainbow-me/rainbowkit": "^0.12.7",
+    "@rainbow-me/rainbowkit": "1.0.0",
+    "@requestnetwork/payment-processor": "^0.38.0",
+    "@requestnetwork/request-client.js": "^0.40.0",
+    "@requestnetwork/web3-signature": "^0.4.36",
     "@t3-oss/env-nextjs": "^0.3.1",
     "@tanstack/react-query": "^4.29.14",
     "@tanstack/react-query-devtools": "^4.29.14",
@@ -33,7 +36,8 @@
     "react-dom": "18.2.0",
     "react-hook-form": "^7.37.0",
     "tailwind-merge": "^1.8.0",
-    "wagmi": "^0.12.10",
+    "viem": "^1.2.11",
+    "wagmi": "1.0.5",
     "zod": "^3.21.4"
   },
   "devDependencies": {
