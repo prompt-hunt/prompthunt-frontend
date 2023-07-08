@@ -22,7 +22,7 @@ const Home: NextPage = () => {
   return (
     <div>
       <div className="mx-auto flex max-w-[40rem] flex-col gap-5 py-14">
-        <h1 className="max-w-[20rem] text-5xl font-bold leading-[3.4rem]">
+        <h1 className="text-5xl font-bold leading-[3.4rem]">
           Explore the best prompts
         </h1>
         <p>
