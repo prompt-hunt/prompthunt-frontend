@@ -285,11 +285,11 @@ export interface PromptHunt extends BaseContract {
 
     "PromptUpvoted(uint256,address)"(
       id?: PromiseOrValue<BigNumberish> | null,
-      upvoter?: null,
+      upvoter?: PromiseOrValue<string> | null,
     ): PromptUpvotedEventFilter;
     PromptUpvoted(
       id?: PromiseOrValue<BigNumberish> | null,
-      upvoter?: null,
+      upvoter?: PromiseOrValue<string> | null,
     ): PromptUpvotedEventFilter;
   };
 

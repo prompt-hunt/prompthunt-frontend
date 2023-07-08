@@ -37,7 +37,11 @@ const PromptsCatalogInner = ({
   category: string;
   model: string;
 }) => {
-  const { data: prompts, isLoading } = usePrompts({
+  const {
+    data: prompts,
+    isLoading,
+    refetch,
+  } = usePrompts({
     category,
     model,
   });
@@ -60,7 +64,12 @@ const PromptsCatalogInner = ({
   return (
     <div className="grid grid-cols-1 gap-6 md:grid-cols-autofill">
       {prompts?.map((prompt) => (
-        <PromptCard key={prompt.id} prompt={prompt} linkToPage />
+        <PromptCard
+          key={prompt.id}
+          prompt={prompt}
+          linkToPage
+          onUpvote={refetch}
+        />
       ))}
     </div>
   );
