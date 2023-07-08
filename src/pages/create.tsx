@@ -1,4 +1,5 @@
 import { ChevronDownIcon } from "@heroicons/react/24/solid";
+import { useRouter } from "next/router";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 
@@ -13,6 +14,7 @@ import { Input } from "@components/basic/input";
 import { Label } from "@components/basic/label";
 import { TextArea } from "@components/basic/textarea/textarea";
 import { PROMPT_CATEGORIES, PROMPT_MODELS } from "@constants/prompts";
+import { useCreatePrompt } from "@lib/prompts/use-create-prompt";
 import { capitalizeFirstCharacter } from "@utils/capitalize-first-character";
 import { extractParameters } from "@utils/extract-parameters";
 
@@ -28,14 +30,24 @@ interface CreatePromptFields {
 }
 
 const CreatePage: NextPage = () => {
+  const router = useRouter();
   const [category, setCategory] = useState(PROMPT_CATEGORIES[0]);
   const [activeModel, setActiveModel] = useState(PROMPT_MODELS[0]);
+
+  const { mutate: createPrompt } = useCreatePrompt({
+    onSuccess(receipt) {
+      const promptId = receipt?.events?.find((e) => e.event === "PromptCreated")
+        ?.args?.id;
+      router.push(`/prompts/${promptId}`);
+    },
+  });
 
   const {
     register,
     handleSubmit,
     formState: { errors },
     watch,
+    getValues,
   } = useForm<CreatePromptFields>();
 
   const prompt = watch("prompt") || "";
@@ -51,6 +63,24 @@ const CreatePage: NextPage = () => {
 
     console.log("promptWithParameters", promptWithParameters);
   });
+
+  const onShare = () => {
+    const values = getValues();
+    const { title, prompt, parameters } = values;
+    createPrompt({
+      title,
+      model: activeModel,
+      prompt,
+      category: category,
+      // If stable diffusion use the result of the prompt
+      image:
+        "https://firebasestorage.googleapis.com/v0/b/promptbase.appspot.com/o/DALLE_IMAGES%2FCrpcqah7YdgU133cBw6H%2Fresized%2F1687293200789_800x800.webp?alt=media&token=c5f63804-7181-4039-bf15-1a24bf98afea",
+      exampleInput: parameters,
+      // Use result of the prompt
+      exampleOutput:
+        "Day 1: Breakfast: Avocado and Bacon Omelette Recipe: Avocado and Bacon Omelette, Lunch: Greek Salad with Grilled Chicken Recipe: Greek Salad with Grilled Chicken, Dinner: Baked Salmon with Lemon Butter Sauce and Roasted Asparagus Recipe: Baked Salmon with Lemon Butter Sauce + Roasted Asparagus",
+    });
+  };
 
   return (
     <div className="flex flex-col gap-10 md:flex-row">
@@ -88,13 +118,17 @@ const CreatePage: NextPage = () => {
           <div>
             <Label className="text-lg">Category</Label>
             <Dropdown className="w-full">
-              <DropdownTrigger className="rounded-btn flex w-full items-center justify-between gap-3 bg-base-300 px-4 py-2 font-medium hover:bg-base-300">
+              <DropdownTrigger
+                type="button"
+                className="rounded-btn flex w-full items-center justify-between gap-3 bg-base-300 px-4 py-2 font-medium hover:bg-base-300"
+              >
                 <span>{category}</span>
                 <ChevronDownIcon className="h-4 w-4" />
               </DropdownTrigger>
               <DropdownContent className="mt-2 min-w-0">
                 {PROMPT_CATEGORIES.map((category) => (
                   <DropdownItem
+                    type="button"
                     key={category}
                     onClick={() => setCategory(category)}
                   >
@@ -141,7 +175,7 @@ const CreatePage: NextPage = () => {
 
       <div className="flex flex-1 flex-col">
         <div className="flex justify-end">
-          <Button>Share</Button>
+          <Button onClick={onShare}>Share</Button>
         </div>
         <div className="rounded-box mt-4 flex-1 bg-base-200 p-4">
           <p>

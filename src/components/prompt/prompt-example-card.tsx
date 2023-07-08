@@ -29,8 +29,9 @@ export const PromptExampleCard = ({
             className="object-cover"
           />
         ) : (
-          <div className="h-full bg-base-300 p-4">
-            {example.exampleOutput.slice(0, 300)}
+          <div className="h-full bg-primary/80 p-4 text-primary-content">
+            {example.exampleOutput.slice(0, 200)}
+            {example.exampleOutput.length > 200 && "..."}
           </div>
         )}
       </div>

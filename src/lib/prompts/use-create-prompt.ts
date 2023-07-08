@@ -11,6 +11,7 @@ export interface CreatePromptData {
   image: string;
   exampleInput: Record<string, string>;
   exampleOutput: string;
+  category: string;
 }
 
 interface UseCreatePromptOptions {
@@ -25,6 +26,7 @@ export const useCreatePrompt = (options?: UseCreatePromptOptions) => {
       prompt,
       model,
       image,
+      category,
       exampleInput,
       exampleOutput,
     }: CreatePromptData) => {
@@ -37,6 +39,7 @@ export const useCreatePrompt = (options?: UseCreatePromptOptions) => {
         image,
         exampleInput,
         exampleOutput,
+        category,
       });
       if (!uri) return;
 
