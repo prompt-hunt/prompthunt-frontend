@@ -20,6 +20,8 @@ import { extractParameters } from "@utils/extract-parameters";
 
 import type { NextPage } from "next";
 
+import axios from "axios"
+
 interface CreatePromptFields {
   title: string;
   prompt: string;
@@ -32,6 +34,7 @@ interface CreatePromptFields {
 const CreatePage: NextPage = () => {
   const router = useRouter();
   const [category, setCategory] = useState(PROMPT_CATEGORIES[0]);
+  const [chatGPTResponse, setChatGPTResponse] = useState("");
   const [activeModel, setActiveModel] = useState(PROMPT_MODELS[0]);
 
   const { mutate: createPrompt } = useCreatePrompt({
@@ -48,18 +51,33 @@ const CreatePage: NextPage = () => {
     formState: { errors },
     watch,
     getValues,
-  } = useForm<CreatePromptFields>();
+  } = useForm<CreatePromptFields>({
+     defaultValues: {
+      parameters: {}
+     }
+  });
 
   const prompt = watch("prompt") || "";
   const promptParameters = extractParameters(prompt);
 
   const onSubmit = handleSubmit(async (data) => {
-    const promptWithParameters = Object.entries(data.parameters).reduce(
+    const promptWithParameters = Object.entries(data.parameters || {}).reduce(
       (acc, entry) => {
         return acc.replace(`<${entry[0]}>`, entry[1]);
       },
       data.prompt,
     );
+
+
+
+    axios.post('/api/gpt',{
+      prompt: promptWithParameters,
+    })
+    .then(function (response) {
+      setChatGPTResponse(response.data.result);
+    });
+
+
 
     console.log("promptWithParameters", promptWithParameters);
   });
@@ -179,8 +197,7 @@ const CreatePage: NextPage = () => {
         </div>
         <div className="rounded-box mt-4 flex-1 bg-base-200 p-4">
           <p>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur
-            nostrum quas deserunt a numquam ad ab quo? Excepturi, beatae ab?
+            {chatGPTResponse}
           </p>
         </div>
       </div>

@@ -1,7 +1,9 @@
 const { Configuration, OpenAIApi } = require("openai");
-const apiKey = "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";
+const apiKey = "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";
 
 export default async function handler(req, res) {
+  console.log("CIao");
+
   if (req.method === "POST") {
     const configuration = new Configuration({
       apiKey,
@@ -24,6 +26,6 @@ export default async function handler(req, res) {
 
     return res.json({ result: cleanedResponse });
   } else {
-    // Handle any other HTTP method
+    return res.status(403).json({ message: "Not allowed" });
   }
 }
