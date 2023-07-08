@@ -17,9 +17,9 @@ export type ChainMap = { [chainId: number]: string };
 const getChains = () => {
   switch (env.NEXT_PUBLIC_CHAIN) {
     case "localhost":
-      return [hardhat, polygonMumbai, gnosis, scrollTestnet];
+      return [hardhat, gnosis, scrollTestnet];
     case "testnet":
-      return [polygonMumbai];
+      return [gnosis, scrollTestnet];
     case "mainnet":
       throw [polygon];
     default:
