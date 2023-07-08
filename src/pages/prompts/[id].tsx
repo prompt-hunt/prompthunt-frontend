@@ -64,7 +64,7 @@ const PromptInfo = ({ prompt, onUpvote, onExecute }: PromptInfoProps) => {
 
           <div className="mt-6 flex justify-between">
             <div className="mt-1 flex items-center gap-2">
-              <AddressAvatar address={prompt.owner} />
+              <AddressAvatar address={prompt.owner} size={30} />
               <Address address={prompt.owner} />
             </div>
 
