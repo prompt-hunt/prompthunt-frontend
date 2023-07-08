@@ -1,7 +1,9 @@
 import { ChevronDownIcon } from "@heroicons/react/24/solid";
+import axios from "axios";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
+import { useMutation } from "wagmi";
 
 import { Button } from "@components/basic/button";
 import {
@@ -32,6 +34,7 @@ interface CreatePromptFields {
 const CreatePage: NextPage = () => {
   const router = useRouter();
   const [category, setCategory] = useState(PROMPT_CATEGORIES[0]);
+  const [result, setResult] = useState("");
   const [activeModel, setActiveModel] = useState(PROMPT_MODELS[0]);
 
   const { mutate: createPrompt, isLoading } = useCreatePrompt({
@@ -42,13 +45,31 @@ const CreatePage: NextPage = () => {
     },
   });
 
+  const { mutate: executePrompt, isLoading: isLoadingExecute } = useMutation(
+    async ({ prompt }: { prompt: string }) => {
+      const res = await axios.post("/api/gpt", {
+        prompt,
+      });
+      return res.data.result;
+    },
+    {
+      onSuccess(result) {
+        setResult(result);
+      },
+    },
+  );
+
   const {
     register,
     handleSubmit,
     formState: { errors },
     watch,
     getValues,
-  } = useForm<CreatePromptFields>();
+  } = useForm<CreatePromptFields>({
+    defaultValues: {
+      parameters: {},
+    },
+  });
 
   const prompt = watch("prompt") || "";
   const promptParameters = extractParameters(prompt);
@@ -61,7 +82,9 @@ const CreatePage: NextPage = () => {
       data.prompt,
     );
 
-    console.log("promptWithParameters", promptWithParameters);
+    executePrompt({
+      prompt: promptWithParameters,
+    });
   });
 
   const onShare = () => {
@@ -77,8 +100,7 @@ const CreatePage: NextPage = () => {
         "https://firebasestorage.googleapis.com/v0/b/promptbase.appspot.com/o/DALLE_IMAGES%2FCrpcqah7YdgU133cBw6H%2Fresized%2F1687293200789_800x800.webp?alt=media&token=c5f63804-7181-4039-bf15-1a24bf98afea",
       exampleInput: parameters,
       // Use result of the prompt
-      exampleOutput:
-        "Day 1: Breakfast: Avocado and Bacon Omelette Recipe: Avocado and Bacon Omelette, Lunch: Greek Salad with Grilled Chicken Recipe: Greek Salad with Grilled Chicken, Dinner: Baked Salmon with Lemon Butter Sauce and Roasted Asparagus Recipe: Baked Salmon with Lemon Butter Sauce + Roasted Asparagus",
+      exampleOutput: result,
     });
   };
 
@@ -167,7 +189,13 @@ const CreatePage: NextPage = () => {
               />
             </div>
           ))}
-          <Button className="mt-4" block type="submit">
+          <Button
+            className="mt-4"
+            block
+            type="submit"
+            loading={isLoadingExecute}
+            disabled={isLoadingExecute}
+          >
             Submit
           </Button>
         </form>
@@ -175,15 +203,12 @@ const CreatePage: NextPage = () => {
 
       <div className="flex flex-1 flex-col">
         <div className="flex justify-end">
-          <Button onClick={onShare} loading={isLoading}>
+          <Button onClick={onShare} loading={isLoading} disabled={isLoading}>
             Share
           </Button>
         </div>
         <div className="rounded-box mt-4 flex-1 bg-base-200 p-4">
-          <p>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur
-            nostrum quas deserunt a numquam ad ab quo? Excepturi, beatae ab?
-          </p>
+          <p>{result}</p>
         </div>
       </div>
     </div>

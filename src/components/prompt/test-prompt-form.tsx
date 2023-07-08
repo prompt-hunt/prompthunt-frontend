@@ -60,7 +60,13 @@ export const TestPromptForm = ({ prompt, onExecute }: TestPromptFormProps) => {
           />
         </div>
       ))}
-      <Button className="mt-4" block type="submit" loading={isLoading}>
+      <Button
+        className="mt-4"
+        block
+        type="submit"
+        loading={isLoading}
+        disabled={isLoading}
+      >
         Run
       </Button>
     </form>
