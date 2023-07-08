@@ -1972,6 +1972,14 @@
     "@json-rpc-tools/types" "^1.7.6"
     "@pedrouid/environment" "^1.0.1"
 
+"@leap-ai/sdk@^0.0.119":
+  version "0.0.119"
+  resolved "https://registry.yarnpkg.com/@leap-ai/sdk/-/sdk-0.0.119.tgz#988a870a1cd0baf6e3419a10616da1a62248f4be"
+  integrity sha512-siFRNmNLb2IaSE8gYKYt8fn9jpbv8gB1lMxGM46l5WKQr/2P+yGx4qh7btmHZ9e97mXDu+I75T0cNrdIbh7Jkg==
+  dependencies:
+    cross-fetch "^3.1.5"
+    form-data "^4.0.0"
+
 "@ledgerhq/connect-kit-loader@^1.0.1":
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/@ledgerhq/connect-kit-loader/-/connect-kit-loader-1.0.2.tgz#8554e16943f86cc2a5f6348a14dfe6e5bd0c572a"
