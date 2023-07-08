@@ -30,13 +30,17 @@ const CategoryButton = ({
   );
 };
 
+interface PromptsCatalogInnerProps {
+  category: string;
+  model: string;
+  query?: string;
+}
+
 const PromptsCatalogInner = ({
   category,
   model,
-}: {
-  category: string;
-  model: string;
-}) => {
+  query,
+}: PromptsCatalogInnerProps) => {
   const {
     data: prompts,
     isLoading,
@@ -44,7 +48,10 @@ const PromptsCatalogInner = ({
   } = usePrompts({
     category,
     model,
+    query,
   });
+
+  console.log("Is loading: ", isLoading);
 
   if (isLoading) {
     return (
@@ -75,7 +82,12 @@ const PromptsCatalogInner = ({
   );
 };
 
-export const PromptsCatalog = ({ className }: { className?: string }) => {
+interface PromptsCatalogProps {
+  className?: string;
+  query?: string;
+}
+
+export const PromptsCatalog = ({ className, query }: PromptsCatalogProps) => {
   const [activeCategory, setActiveCategory] = useState("");
   const [activeModel, setActiveModel] = useState("");
 
@@ -116,7 +128,11 @@ export const PromptsCatalog = ({ className }: { className?: string }) => {
           />
         ))}
       </div>
-      <PromptsCatalogInner category={activeCategory} model={activeModel} />
+      <PromptsCatalogInner
+        category={activeCategory}
+        model={activeModel}
+        query={query}
+      />
     </div>
   );
 };

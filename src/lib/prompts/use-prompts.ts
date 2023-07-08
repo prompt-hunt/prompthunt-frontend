@@ -9,14 +9,15 @@ interface UsePromptsParams {
   enabled?: boolean;
   category?: string;
   model?: string;
+  query?: string;
 }
 
 export const usePrompts = (params?: UsePromptsParams) => {
-  const { category, model } = params || {};
+  const { category, model, query } = params || {};
   const promptHunt = usePromptHunt();
 
   return useQuery(
-    ["prompts", category, model],
+    ["prompts", category, model, query],
     async () => {
       if (!promptHunt) return [];
 
@@ -59,12 +60,19 @@ export const usePrompts = (params?: UsePromptsParams) => {
         metadata: promptsMetadata[index],
       }));
 
-      /* Filter prompts by category */
-      const filteredPromptsByCategory = category
-        ? promptsWithMetadata.filter(
-            (prompt) => prompt.metadata.category === category,
+      /* Filter prompts by query */
+      const filteredPromptsByQuery = query
+        ? promptsWithMetadata.filter((prompt) =>
+            prompt.metadata.title.toLowerCase().includes(query.toLowerCase()),
           )
         : promptsWithMetadata;
+
+      /* Filter prompts by category */
+      const filteredPromptsByCategory = category
+        ? filteredPromptsByQuery.filter(
+            (prompt) => prompt.metadata.category === category,
+          )
+        : filteredPromptsByQuery;
 
       /* Filter prompts by model */
       const filteredPrompts = model
