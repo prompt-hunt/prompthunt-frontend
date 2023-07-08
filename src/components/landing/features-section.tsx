@@ -1,8 +1,8 @@
 import {
-  AcademicCapIcon,
-  CurrencyDollarIcon,
   UserGroupIcon,
-  ChatBubbleLeftRightIcon,
+  ArrowUpCircleIcon,
+  MagnifyingGlassIcon,
+  WrenchScrewdriverIcon,
 } from "@heroicons/react/24/solid";
 import { ReactNode } from "react";
 
@@ -33,7 +33,7 @@ export const FeaturesSection = () => {
       <p className="max-w-[30rem] text-center text-lg text-base-content-neutral"></p>
       <div className="grid auto-rows-fr grid-cols-1 gap-4 sm:grid-cols-2">
         <FeatureCard
-          icon={<AcademicCapIcon />}
+          icon={<WrenchScrewdriverIcon />}
           title="Generate and learn"
           description="Play around with AI models and learn how to create good prompts."
         />
@@ -43,12 +43,12 @@ export const FeaturesSection = () => {
           description="Share the best prompts that you find with everyone."
         />
         <FeatureCard
-          icon={<CurrencyDollarIcon />}
+          icon={<MagnifyingGlassIcon />}
           title="Find prompts"
           description="Find the best prompts for your specific use case and unlock the power of AI."
         />
         <FeatureCard
-          icon={<ChatBubbleLeftRightIcon />}
+          icon={<ArrowUpCircleIcon />}
           title="Upvote"
           description="Upvote your favourite prompts and support the best prompt creators."
         />

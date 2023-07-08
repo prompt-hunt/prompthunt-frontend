@@ -10,7 +10,7 @@ export const Hero = () => {
         <span className="text-primary">collaborative</span> archive of AI
         prompts
       </h1>
-      <p className="max-w-[20rem] text-xl text-base-content-neutral sm:max-w-[38rem]">
+      <p className="max-w-[20rem] text-xl text-base-content-neutral sm:max-w-[34rem]">
         On PromptHunt anyone can share their best prompts for AI models and
         search for prompts to achieve the tasks they need.
       </p>
