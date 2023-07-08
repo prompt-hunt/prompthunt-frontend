@@ -30,6 +30,7 @@ import type {
 export interface PromptHuntInterface extends utils.Interface {
   functions: {
     "addPromptExample(uint256,string)": FunctionFragment;
+    "claimFunds()": FunctionFragment;
     "createPrompt(string)": FunctionFragment;
     "hasUpvotedPrompt(address,uint256)": FunctionFragment;
     "prompts(uint256)": FunctionFragment;
@@ -39,6 +40,7 @@ export interface PromptHuntInterface extends utils.Interface {
   getFunction(
     nameOrSignatureOrTopic:
       | "addPromptExample"
+      | "claimFunds"
       | "createPrompt"
       | "hasUpvotedPrompt"
       | "prompts"
@@ -48,6 +50,10 @@ export interface PromptHuntInterface extends utils.Interface {
   encodeFunctionData(
     functionFragment: "addPromptExample",
     values: [PromiseOrValue<BigNumberish>, PromiseOrValue<string>],
+  ): string;
+  encodeFunctionData(
+    functionFragment: "claimFunds",
+    values?: undefined,
   ): string;
   encodeFunctionData(
     functionFragment: "createPrompt",
@@ -70,6 +76,7 @@ export interface PromptHuntInterface extends utils.Interface {
     functionFragment: "addPromptExample",
     data: BytesLike,
   ): Result;
+  decodeFunctionResult(functionFragment: "claimFunds", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "createPrompt",
     data: BytesLike,
@@ -178,6 +185,10 @@ export interface PromptHunt extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> },
     ): Promise<ContractTransaction>;
 
+    claimFunds(
+      overrides?: Overrides & { from?: PromiseOrValue<string> },
+    ): Promise<ContractTransaction>;
+
     createPrompt(
       _dataUri: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> },
@@ -209,6 +220,10 @@ export interface PromptHunt extends BaseContract {
   addPromptExample(
     _promptId: PromiseOrValue<BigNumberish>,
     _dataUri: PromiseOrValue<string>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> },
+  ): Promise<ContractTransaction>;
+
+  claimFunds(
     overrides?: Overrides & { from?: PromiseOrValue<string> },
   ): Promise<ContractTransaction>;
 
@@ -245,6 +260,8 @@ export interface PromptHunt extends BaseContract {
       _dataUri: PromiseOrValue<string>,
       overrides?: CallOverrides,
     ): Promise<void>;
+
+    claimFunds(overrides?: CallOverrides): Promise<void>;
 
     createPrompt(
       _dataUri: PromiseOrValue<string>,
@@ -323,6 +340,10 @@ export interface PromptHunt extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> },
     ): Promise<BigNumber>;
 
+    claimFunds(
+      overrides?: Overrides & { from?: PromiseOrValue<string> },
+    ): Promise<BigNumber>;
+
     createPrompt(
       _dataUri: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> },
@@ -349,6 +370,10 @@ export interface PromptHunt extends BaseContract {
     addPromptExample(
       _promptId: PromiseOrValue<BigNumberish>,
       _dataUri: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> },
+    ): Promise<PopulatedTransaction>;
+
+    claimFunds(
       overrides?: Overrides & { from?: PromiseOrValue<string> },
     ): Promise<PopulatedTransaction>;
 

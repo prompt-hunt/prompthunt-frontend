@@ -111,6 +111,13 @@ export const PromptHuntAbi = [
     type: "function",
   },
   {
+    inputs: [],
+    name: "claimFunds",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
     inputs: [
       {
         internalType: "string",
@@ -188,5 +195,9 @@ export const PromptHuntAbi = [
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
+  },
+  {
+    stateMutability: "payable",
+    type: "receive",
   },
 ] as const;
