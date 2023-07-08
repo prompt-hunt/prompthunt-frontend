@@ -44,8 +44,6 @@ const curr = "5_0xBA62BCfcAaFc6622853cca2BE6Ac7d845BC0f2Dc";
 // const curr = '5_0xdD69DB25F6D620A7baD3023c5d32761D353D3De9'
 
 const DonatePage: NextPage = () => {
-  const [storageChain] = useState("5");
-  const [payer] = useState("");
   const [expectedAmount, setExpectedAmount] = useState("");
   const [currency] = useState(curr);
   const [dueDate] = useState("");
@@ -55,8 +53,10 @@ const DonatePage: NextPage = () => {
   const [request, setRequest] = useState<Types.IRequestDataWithEvents>();
 
   const [isLoading, setIsLoading] = useState(false);
+  const [isPayLoading, setIsPayLoading] = useState(false);
 
   const payTheRequest = async (reqID: string) => {
+    setIsPayLoading(true);
     const signatureProvider = new Web3SignatureProvider(window.ethereum);
     const requestNetwork = new RequestNetwork({
       nodeConnectionConfig: {
@@ -78,6 +78,7 @@ const DonatePage: NextPage = () => {
     }
     const tx = await payRequest(requestData);
     await tx.wait(1);
+    setIsPayLoading(true);
   };
 
   function createRequest() {
@@ -187,7 +188,11 @@ const DonatePage: NextPage = () => {
           {...register("amount", { required: "Amount is required" })}
           error={errors.amount?.message}
         />
-        <Button className="mt-1" loading={isLoading} disabled={isLoading}>
+        <Button
+          className="mt-1"
+          loading={isLoading || isPayLoading}
+          disabled={isLoading || isPayLoading}
+        >
           Donate
         </Button>
       </form>
