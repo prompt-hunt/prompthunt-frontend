@@ -10,9 +10,10 @@ export const Hero = () => {
         <span className="text-primary">collaborative</span> archive of AI
         prompts
       </h1>
-      <p className="max-w-[20rem] text-xl text-base-content-neutral sm:max-w-[34rem]">
-        On PromptHunt anyone can share their best prompts for AI models and
-        search for prompts to achieve the tasks they need.
+      <p className="max-w-[20rem] text-xl text-base-content-neutral sm:max-w-[36rem]">
+        PromptHunt allows everyone to share their most effective prompts while
+        also exploring a curated repository of prompts created by others to
+        accomplish various tasks.
       </p>
       <Link href="/feed">
         <Button size="lg">Find prompts</Button>
