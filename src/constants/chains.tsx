@@ -20,7 +20,7 @@ const getChains = () => {
     case "localhost":
       return [hardhat, gnosis, scrollTestnet, goerli];
     case "testnet":
-      return [gnosis, scrollTestnet];
+      return [gnosis, scrollTestnet, goerli];
     case "mainnet":
       throw [polygon];
     default:
