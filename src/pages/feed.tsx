@@ -26,8 +26,9 @@ const Home: NextPage = () => {
           Explore the best prompts
         </h1>
         <p>
-          PromptHunt is an open library of AI prompts. Explore prompts created
-          by the community and leverage the power of AI to achieve your tasks.
+          PromptHunt is an open repository of AI prompts. Explore prompts
+          created by the community and leverage the power of AI to achieve your
+          tasks.
         </p>
         <Input
           placeholder="Search"
